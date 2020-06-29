@@ -75,8 +75,10 @@ public class Vector {
         return (long) (value - 0.5);
     }
 
-    public static class Vec {
+    public static class Vec extends Numeric {
 
+        public static final long HALF_MAX_VALUE = (Long.MAX_VALUE - 1) / 2 + 1;
+        
         public long times;
 
         public double value;
@@ -86,6 +88,12 @@ public class Vector {
             this.value = value;
         }
 
+        public Numeric add(Numeric numeric) {
+            long times = 0;
+            double value = 0;
+            
+            return null;
+        }
     }
 
     public static long[] continuedFraction(double value) {
@@ -104,7 +112,7 @@ public class Vector {
         return longs;
     }
 
-    public static class Fraction extends Number {
+    public static class Fraction extends Numeric {
 
         public Numeric nominator;
 
@@ -138,6 +146,30 @@ public class Vector {
             this.denominator = new Numeric(den);
         }
 
+        public Numeric add(Numeric numeric) {
+            if (!(numeric instanceof Fraction)) return new Fraction(numeric.multiply(this.denominator).add(this.nominator), this.denominator);
+            return ((Fraction) numeric).denominator.equals(this.denominator) ? new Fraction(this.nominator.add(((Fraction) numeric).nominator), this.denominator) : new Fraction(this.nominator.multiply(((Fraction) numeric).denominator).add(this.denominator.multiply(((Fraction) numeric).nominator)), this.denominator.multiply(((Fraction) numeric).denominator));
+        }
+
+        public Numeric sub(Numeric numeric) {
+            if (!(numeric instanceof Fraction)) return new Fraction(numeric.multiply(this.denominator).add(this.nominator), this.denominator);
+            return ((Fraction) numeric).denominator.equals(this.denominator) ? new Fraction(this.nominator.sub(((Fraction) numeric).nominator), this.denominator) : new Fraction(this.nominator.multiply(((Fraction) numeric).denominator).add(this.denominator.multiply(((Fraction) numeric).nominator)), this.denominator.multiply(((Fraction) numeric).denominator));
+        }
+
+        public Numeric multiply(Numeric numeric) {
+            if (!(numeric instanceof Fraction)) return new Fraction(this.nominator.multiply(numeric), this.denominator);
+            return new Fraction(this.nominator.multiply(((Fraction) numeric).nominator), this.denominator.multiply(((Fraction) numeric).denominator));
+        }
+
+        public Numeric division(Numeric numeric) {
+            return this.multiply(numeric instanceof Fraction ? new Fraction(((Fraction) numeric).denominator, ((Fraction) numeric).nominator) : new Fraction(new Numeric(1), numeric));
+        }
+
+        @Deprecated
+        public Numeric modulo(Numeric numeric) {
+            return null;
+        }
+
         public int intValue() {
             return (int) this.longValue();
         }
@@ -161,6 +193,9 @@ public class Vector {
 
         public double value;
 
+        protected Numeric() {
+        }
+
         public Numeric(double value) {
             this.value = value;
         }
@@ -181,6 +216,33 @@ public class Vector {
 
         public double doubleValue() {
             return this.value;
+        }
+
+        public Numeric add(Numeric numeric) {
+            return new Numeric(this.value + numeric.value);
+        }
+
+        public Numeric sub(Numeric numeric) {
+            return new Numeric(this.value - numeric.value);
+        }
+
+        public Numeric multiply(Numeric numeric) {
+            return new Numeric(this.value * numeric.value);
+        }
+
+        public Numeric division(Numeric numeric) {
+            return new Numeric(this.value / numeric.value);
+        }
+
+        /**
+         * Memo: (x+y)/z = b + (x - bz + y)/z  (x is int, y is float, 0 < y < 1, z is any number).
+         *       'b + (x - bz + y) % z' = 'x - bz + y'.
+         *       if z = 1, return y.
+         * @param numeric
+         * @return
+         */
+        public Numeric modulo(Numeric numeric) {
+            return new Numeric(this.value % numeric.value);
         }
     }
 }
