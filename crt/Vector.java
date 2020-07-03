@@ -18,7 +18,13 @@ public class Vector {
     public Numeric innerProduct(Vector... vectors) {
         if (vectors.length == 0) throw new IllegalStateException("That Vector length is ZERO");
         if (vectors.length == 1) return innerProduct(this, vectors[0]);
-        return innerProduct(this, vectors);
+        return innerProduct0(this, vectors);
+    }
+
+    public String toString() {
+        String string = "";
+        for (Numeric numeric : this.state) string += numeric.toString() + ", ";
+        return "{" + string.substring(0, string.length() - 2) + "}";
     }
 
     public static boolean isError(Numeric numeric) {
@@ -33,13 +39,13 @@ public class Vector {
         Numeric[] doubles = new Numeric[length0];
         for (int len = 0; len < doubles.length; ++len) {
             if (isError(vector0.state[len]) || isError(vector1.state[len])) continue;
-            doubles[len] = vector0.state[len].multiply(vector0.state[len]);
+            doubles[len] = vector0.state[len].multiply(vector1.state[len]);
         }
         return sum(new Vector(doubles));
     }
 
     @Deprecated
-    public static Numeric innerProduct(Vector vector, Vector...vectors) {
+    public static Numeric innerProduct0(Vector vector, Vector...vectors) {
         if (vectors.length == 0 || vector == null) return sum(vector);
         int length = vector.state.length;
         boolean[] product = new boolean[length];
