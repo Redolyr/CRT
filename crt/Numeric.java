@@ -87,6 +87,10 @@ public class Numeric extends Number {
         return false;
     }
 
+    public String toString() {
+        return Double.toString(this.value);
+    }
+
     public static Numeric[] makeNumerics(double... doubles) {
         Numeric[] numerics = new Numeric[doubles.length];
         for (int len = 0; len < numerics.length; ++len) numerics[len] = new Numeric(doubles[len]);
