@@ -89,6 +89,10 @@ public class Fraction extends Numeric {
         return this.nominator.doubleValue() / this.denominator.doubleValue();
     }
 
+    public String toString() {
+        return String.format("%s / %s", this.nominator, this.denominator);
+    }
+
     public static long[] continuedFraction(double value) {
         long[] longs = new long[0];
 
