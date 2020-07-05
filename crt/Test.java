@@ -8,5 +8,22 @@ public class Test {
         //3 * 2 + 2 * 4 + 8 * 9 = 6 + 8 + 72 = 14 + 72 = 86
         Numeric numeric = vector.innerProduct(vector1);
         System.out.println(numeric);
+
+        Numeric fraction = new Fraction(800, 1000);
+        System.out.println(fraction);
+
+        Numeric fraction0 = new Fraction(0.8);
+        System.out.println(fraction0);
+
+        /**
+         * 'x + 1/0.8 = x * 0.8'<br>
+         *     x * (1 - 0.8) = -1/0.8<br>
+         *         x = -10/8 * 1/(1-0.8) = -50/8<br>
+         *             x = -6.25
+         */
+        Numeric fraction1 = new Fraction(6.25 + 1 / 0.8);
+
+        System.out.println(fraction.equals(fraction0) + ", " + fraction.doubleValue() + " ," + fraction0.doubleValue());
+        System.out.println(fraction1);
     }
 }
