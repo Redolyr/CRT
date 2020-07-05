@@ -26,14 +26,15 @@ public class Fraction extends Numeric {
 
         int index = longs.length - 1;
         den = longs[index];
-        while (index > -1) {
+        while (index > 0) {
             nom += den * longs[--index];
             temp = nom;
             nom = den;
             den = temp;
         }
-        this.nominator = new Numeric(nom);
-        this.denominator = new Numeric(den);
+        System.out.println(longs.length + ", " + index);
+        this.nominator = new Numeric(longs.length % 2 == 1 ? den : nom);
+        this.denominator = new Numeric(longs.length % 2 == 1 ? nom : den);
     }
 
     public Numeric add(Numeric numeric) {
