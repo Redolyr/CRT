@@ -38,15 +38,15 @@ public class Fraction extends Numeric {
     }
 
     public Numeric add(Numeric numeric) {
-        if (!(numeric instanceof Fraction))
-            return new Fraction(numeric.multiply(this.denominator).add(this.nominator), this.denominator);
-        return ((Fraction) numeric).denominator.equals(this.denominator) ? new Fraction(this.nominator.add(((Fraction) numeric).nominator), this.denominator) : new Fraction(this.nominator.multiply(((Fraction) numeric).denominator).add(this.denominator.multiply(((Fraction) numeric).nominator)), this.denominator.multiply(((Fraction) numeric).denominator));
+        if (!(numeric instanceof Fraction)) return new Fraction(numeric.multiply(this.denominator).add(this.nominator), this.denominator);
+        Fraction fraction = (Fraction) numeric;
+        return (fraction.denominator.equals(this.denominator) ? new Fraction(this.nominator.add(fraction.nominator), this.denominator) : new Fraction(this.nominator.multiply(fraction.denominator).add(this.denominator.multiply(fraction.nominator)), this.denominator.multiply(fraction.denominator)));
     }
 
     public Numeric sub(Numeric numeric) {
-        if (!(numeric instanceof Fraction))
-            return new Fraction(numeric.multiply(this.denominator).add(this.nominator), this.denominator);
-        return ((Fraction) numeric).denominator.equals(this.denominator) ? new Fraction(this.nominator.sub(((Fraction) numeric).nominator), this.denominator) : new Fraction(this.nominator.multiply(((Fraction) numeric).denominator).add(this.denominator.multiply(((Fraction) numeric).nominator)), this.denominator.multiply(((Fraction) numeric).denominator));
+        if (!(numeric instanceof Fraction)) return new Fraction(numeric.multiply(this.denominator).add(this.nominator), this.denominator);
+        Fraction fraction = (Fraction) numeric;
+        return (fraction.denominator.equals(this.denominator) ? new Fraction(this.nominator.sub(fraction.nominator), this.denominator) : new Fraction(this.nominator.multiply(fraction.denominator).add(this.denominator.multiply(fraction.nominator)), this.denominator.multiply(fraction.denominator)));
     }
 
     public Numeric multiply(Numeric numeric) {
@@ -60,7 +60,9 @@ public class Fraction extends Numeric {
 
     @Deprecated
     public Numeric modulo(Numeric numeric) {
-        return new Fraction(numeric instanceof Fraction ? this.nominator.multiply(((Fraction) numeric).denominator).modulo(((Fraction) numeric).nominator.multiply(this.denominator)) : this.nominator.modulo(numeric.multiply(this.denominator)), numeric instanceof Fraction ? this.denominator.multiply(((Fraction) numeric).denominator) : this.denominator);
+        if (!(numeric instanceof Fraction)) return new Fraction(this.nominator.modulo(numeric.multiply(this.denominator)), this.denominator);
+        Fraction fraction = (Fraction) numeric;
+        return new Fraction(this.nominator.multiply(fraction.denominator).modulo(fraction.nominator.multiply(this.denominator)), this.denominator.multiply(fraction.denominator));
     }
 
     /**
@@ -69,7 +71,9 @@ public class Fraction extends Numeric {
      * @return
      */
     public Numeric takeModulo(Numeric target) {
-        return new Fraction(target instanceof Fraction ? this.nominator.multiply(((Fraction) target).denominator).takeModulo(((Fraction) target).nominator.multiply(this.denominator)) : this.nominator.takeModulo(this.denominator.multiply(target)), target instanceof Fraction ? this.denominator.multiply(((Fraction) target).denominator) : this.denominator);
+        if (!(target instanceof Fraction)) return new Fraction(this.nominator.takeModulo(this.denominator.multiply(target)), this.denominator);
+        Fraction fraction = (Fraction) target;
+        return new Fraction(this.nominator.multiply(fraction.denominator).takeModulo(fraction.nominator.multiply(this.denominator)), this.denominator.multiply(fraction.denominator));
     }
 
     public int intValue() {
