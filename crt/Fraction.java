@@ -46,7 +46,7 @@ public class Fraction extends Numeric {
     public Numeric sub(Numeric numeric) {
         if (!(numeric instanceof Fraction)) return new Fraction(numeric.multiply(this.denominator).add(this.nominator), this.denominator);
         Fraction fraction = (Fraction) numeric;
-        return (fraction.denominator.equals(this.denominator) ? new Fraction(this.nominator.sub(fraction.nominator), this.denominator) : new Fraction(this.nominator.multiply(fraction.denominator).add(this.denominator.multiply(fraction.nominator)), this.denominator.multiply(fraction.denominator)));
+        return (fraction.denominator.equals(this.denominator) ? new Fraction(this.nominator.sub(fraction.nominator), this.denominator) : new Fraction(this.nominator.multiply(fraction.denominator).sub(this.denominator.multiply(fraction.nominator)), this.denominator.multiply(fraction.denominator)));
     }
 
     public Numeric multiply(Numeric numeric) {
