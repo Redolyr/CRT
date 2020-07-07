@@ -73,7 +73,7 @@ public class Fraction extends Numeric {
     public Numeric takeModulo(Numeric target) {
         if (!(target instanceof Fraction)) return new Fraction(this.nominator.takeModulo(this.denominator.multiply(target)), this.denominator);
         Fraction fraction = (Fraction) target;
-        return new Fraction(this.nominator.multiply(fraction.denominator).takeModulo(fraction.nominator.multiply(this.denominator)), this.denominator.multiply(fraction.denominator));
+        return new Fraction(fraction.nominator.multiply(this.denominator).takeModulo(this.nominator.multiply(fraction.denominator)), this.denominator.multiply(fraction.denominator));
     }
 
     public int intValue() {
