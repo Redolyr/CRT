@@ -32,5 +32,13 @@ public class Test {
         System.out.println(Arrays.toString(Fraction.continuedFraction(3.75)));
         System.out.println("Multiply Division " + fraction.multiply(fraction0) + ", " + fraction.division(fraction0));
         System.out.println("Multiply Division " + fraction.multiply(fraction0).doubleValue() + ", " + fraction.division(fraction0).doubleValue());
+
+        System.out.println(fraction.sub(fraction0).doubleValue());
+        System.out.println(fraction.sub(fraction1.division(new Numeric(-6.25))).doubleValue());
+
+        System.out.println(new Numeric(5).modulo(new Numeric(3)));
+        System.out.println(new Numeric(3).takeModulo(new Numeric(5)));
+        System.out.println(new Fraction(50).modulo(new Fraction(1, 2)));
+        System.out.println(new Fraction(1, 2).takeModulo(new Fraction(50)));
     }
 }
