@@ -8,26 +8,14 @@ public class Fraction extends Numeric {
 
     public Numeric denominator;
 
-    public double n;
-
-    public int num0;
-
-    public static int num = 0;
-
     public Fraction(double nominator, double denominator) {
         this.nominator = new Numeric(nominator);
         this.denominator = new Numeric(denominator);
-        this.n = nominator;
-        System.out.println("index:" + ++num + ", " + 1 + ", " + this.n + ", " + nominator + ", " + denominator);
-        this.num0 = num;
     }
 
     public Fraction(Numeric nominator, Numeric denominator) {
         this.nominator = nominator;
         this.denominator = denominator;
-        this.n = nominator.value;
-        System.out.println("index:" + ++num + ", " + 1 + ", " + this.n + ", " + nominator + ", " + denominator);
-        this.num0 = num;
     }
 
     public Fraction(double value) {
@@ -47,9 +35,6 @@ public class Fraction extends Numeric {
         System.out.println(longs.length + ", " + index);
         this.nominator = new Numeric(longs.length % 2 == 1 ? den : nom);
         this.denominator = new Numeric(longs.length % 2 == 1 ? nom : den);
-        this.n = longs.length % 2 == 1 ? den : nom;
-        System.out.println("index:" + ++num + ", " + 1 + ", " + this.n + ", " + nom + ", " + den);
-        this.num0 = num;
     }
 
     public Numeric add(Numeric numeric) {
@@ -66,23 +51,7 @@ public class Fraction extends Numeric {
 
     public Numeric multiply(Numeric numeric) {
         if (!(numeric instanceof Fraction)) return new Fraction(this.nominator.multiply(numeric), this.denominator);
-        while (!this.nominator.equals(new Numeric(n))) {
-            System.out.print(this.nominator);
-            this.nominator = new Numeric(this.n);
-            System.out.println(" " + this.nominator + " " + this.n);
-        }
-        System.out.println("index:" + this.num0 + " multiply " + this.nominator + ", " + ((Fraction) numeric).nominator);
-        while (!this.nominator.equals(new Numeric(n))) {
-            System.out.print(this.nominator);
-            this.nominator = new Numeric(this.n);
-            System.out.println(" " + this.nominator + " " + this.n);
-        }
-        Numeric numeric0 = this.nominator;
-        while (numeric0.isZero() && this.n != 0) {
-            numeric0 = new Numeric(this.n);
-        }
-        System.out.printf("index:%d multiply %s (%s / %s), %s (%s / %s), %f\n", this.num0, this, numeric0, this.denominator, numeric, ((Fraction) numeric).nominator, ((Fraction) numeric).denominator, this.n);
-        return new Fraction(numeric0.multiply(((Fraction) numeric).nominator), this.denominator.multiply(((Fraction) numeric).denominator));
+        return new Fraction(this.nominator.multiply(((Fraction) numeric).nominator), this.denominator.multiply(((Fraction) numeric).denominator));
     }
 
     public Numeric division(Numeric numeric) {
