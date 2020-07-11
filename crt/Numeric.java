@@ -84,6 +84,7 @@ public class Numeric extends Number {
     public boolean equals(Object obj) {
         if (obj.getClass().equals(boolean.class)) return false;
         if (obj.getClass().isPrimitive()) return this.value == (double) obj;
+        if (obj instanceof Numeric) return ((Numeric) obj).value == this.value;
         return false;
     }
 
