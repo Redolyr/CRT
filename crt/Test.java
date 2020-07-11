@@ -41,11 +41,11 @@ public class Test {
         System.out.println(new Fraction(50).modulo(new Fraction(1, 2)));
         System.out.println(new Fraction(1, 2).takeModulo(new Fraction(50)));
 
-        Fraction fraction2 = new Fraction(0);
+        Fraction fraction2 = new Fraction(1);
         Fraction[] fractions = new Fraction[5];
         fractions[0] = new Fraction(1, 1);
         for (int len = 1; len < 5; ++len) {
-            fraction2 = (Fraction) fraction2.multiply(fractions[len] = new Fraction(3, 4 * len + 5));
+            fraction2 = (Fraction) fraction2.multiply(fractions[len] = new Fraction(4 * len + 3, 4 * len + 5));
             System.out.println(fractions[len] + ", " + len + " get");
         }
         System.out.println(Arrays.toString(fractions));
