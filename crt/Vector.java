@@ -94,7 +94,7 @@ public class Vector {
 
     public static Numeric allProduct(Vector vector) {
         for (Numeric numeric : vector.state) if (numeric.equals(new Numeric(0))) return new Numeric(0);
-        Numeric numeric numeric = new Numeric(1);
+        Numeric numeric = new Numeric(1);
         for (Numeric numeric0 : vector.state) numeric = numeric.multiply(numeric0);
         return numeric;
     }
@@ -112,7 +112,7 @@ public class Vector {
             else if (len >= min && len <= max)
                 for (int pos : positions) if (pos != len && numeric.equals(new Numeric(0))) return new Numeric(0);
         }
-        Numeric numeric numeric = new Numeric(1);
+        Numeric numeric = new Numeric(1);
         for (Numeric numeric0 : vector.state) numeric = numeric.multiply(numeric0);
         return numeric;
     }
