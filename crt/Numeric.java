@@ -11,6 +11,10 @@ public class Numeric extends Number {
         this.value = value;
     }
 
+    protected Numeric toValue() {
+        return this;
+    }
+
     @Deprecated
     public int intValue() {
         return (int) this.value;
@@ -38,7 +42,7 @@ public class Numeric extends Number {
     }
 
     public Numeric multiply(Numeric numeric) {
-        return new Numeric(this.value * numeric.value);
+        return new Numeric(this.value * numeric.toValue().value);
     }
 
     public Numeric division(Numeric numeric) {
