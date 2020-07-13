@@ -37,6 +37,10 @@ public class Fraction extends Numeric {
         this.denominator = new Numeric(longs.length % 2 == 1 ? nom : den);
     }
 
+    protected Numeric toValue() {
+        return this.nominator.division(this.denominator).toValue();
+    }
+
     public Numeric add(Numeric numeric) {
         if (!(numeric instanceof Fraction)) return new Fraction(numeric.multiply(this.denominator).add(this.nominator), this.denominator);
         Fraction fraction = (Fraction) numeric;
@@ -92,6 +96,18 @@ public class Fraction extends Numeric {
 
     public double doubleValue() {
         return this.nominator.doubleValue() / this.denominator.doubleValue();
+    }
+
+    public boolean isZero() {
+        return this.nominator.isZero() || this.denominator.isZero();
+    }
+
+    public boolean isNaN() {
+        return this.nominator.isZero() && this.denominator.isZero();
+    }
+
+    public boolean isInfinite() {
+        return this.denominator.isZero();
     }
 
     public String toString() {
