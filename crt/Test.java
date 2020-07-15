@@ -52,6 +52,7 @@ public class Test {
         System.out.println(new Vector(fractions));
         System.out.println(Vector.allProduct(new Vector(fractions)));
 
+        Numeric ONE = new Numeric(1);
         Numeric numeric1 = new Numeric(1);
         Numeric numeric2 = new Numeric(1);
         Vector vector2 = new Vector( 3, 5, 7);
@@ -59,13 +60,29 @@ public class Test {
         long elapsedTime0 = 0;
         long elapsedTime1 = 0;
         long elapsedTiem = 0;
-        Numeric ONE = new Numeric(1);
         System.out.println();
-        elapsedTiem = System.nanoTime();
         for (int __len = 0; __len < 3; ++__len) {
             use = vector2.state[__len];
             numeric1 = ONE;
             numeric2 = ONE;
+            elapsedTiem = System.nanoTime();
+            numeric1 = Vector.allProduct(vector2).division(use).modulo(use);
+            elapsedTime0 = System.nanoTime();
+            for (int len = 0; len < 3; ++len) {
+//                System.out.println(len + ", " + __len + ", " + vector2.state[len] + ", " + use + ", " + (len == __len ? ONE : vector2.state[len].modulo(use)));
+                numeric2 = numeric2.multiply(len == __len ? ONE : vector2.state[len].modulo(use));
+            }
+//            System.out.println(use + ", " + __len + ", " + numeric2);
+            numeric2 = numeric2.modulo(use);
+            elapsedTime1 = System.nanoTime();
+            System.out.printf("%s (%d): %s (%d), %s (%d)\n", use, __len, numeric1, elapsedTime0 - elapsedTiem, numeric2, elapsedTime1 - elapsedTime0);
+        }
+        vector2 = new Vector( 3, 7, 19);
+        for (int __len = 0; __len < 3; ++__len) {
+            use = vector2.state[__len];
+            numeric1 = ONE;
+            numeric2 = ONE;
+            elapsedTiem = System.nanoTime();
             numeric1 = Vector.allProduct(vector2).division(use).modulo(use);
             elapsedTime0 = System.nanoTime();
             for (int len = 0; len < 3; ++len) {
