@@ -1,6 +1,6 @@
 package crt;
 
-import java.util.Arrays;
+        import java.util.Arrays;
 
 public class Test {
 
@@ -93,6 +93,18 @@ public class Test {
             numeric2 = numeric2.modulo(use);
             elapsedTime1 = System.nanoTime();
             System.out.printf("%s (%d): %s (%d), %s (%d)\n", use, __len, numeric1, elapsedTime0 - elapsedTiem, numeric2, elapsedTime1 - elapsedTime0);
+        }
+
+        vector2 = new Vector( 3, 5, 7);
+        Vector vector3 = new Vector(1, 1, 1);
+        for (int __len = 0; __len < 3; ++__len) {
+            use = vector2.state[__len];
+            numeric2 = ONE;
+            for (int len = 0; len < 3; ++len) numeric2 = numeric2.multiply(len == __len ? ONE : vector2.state[len].modulo(use));
+            numeric2 = numeric2.modulo(use);
+            if (numeric2.multiply(use.sub(ONE)).modulo(use).equals(ONE)) vector3.state[__len] = new Numeric(-1);
+            else vector3.state[__len] = ONE;
+            System.out.printf("%s (%d): %s (%d), %s (%d), %s\n", use, __len, numeric1, elapsedTime0 - elapsedTiem, numeric2, elapsedTime1 - elapsedTime0, vector3.state[__len]);
         }
     }
 }
