@@ -107,7 +107,7 @@ public class Test {
             System.out.printf("%s (%d): %s (%d), %s (%d), %s\n", use, __len, numeric1, elapsedTime0 - elapsedTiem, numeric2, elapsedTime1 - elapsedTime0, vector3.state[__len]);
         }
 
-        vector2 = new Vector( 3, 5, 11);
+        vector2 = new Vector( 3, 7, 13);
         vector3 = new Vector(1, 1, 1);
         for (int __len = 0; __len < 3; ++__len) {
             use = vector2.state[__len];
@@ -115,6 +115,64 @@ public class Test {
             for (int len = 0; len < 3; ++len) numeric2 = numeric2.multiply(len == __len ? ONE : vector2.state[len].modulo(use));
             vector3.state[__len] = numeric2.modulo(use);
             System.out.printf("%s (%d): %s (%d), %s (%d), %s\n", use, __len, numeric1, elapsedTime0 - elapsedTiem, numeric2, elapsedTime1 - elapsedTime0, vector3.state[__len]);
+        }
+
+        Numeric input = vector2.state[0].multiply(vector2.state[1].multiply(vector2.state[2])).sub(new Numeric(1));
+        Vector vector4 = new Vector(input.modulo(vector2.state[0]), input.modulo(vector2.state[1]), input.modulo(vector2.state[2]));
+        Vector vector5 = new Vector(0, 0, 0);
+        Numeric numeric3;
+        Numeric[] numerics = new Numeric[vector2.state.length];
+        Vector[] vector6 = new Vector[(int) Math.pow(2, numerics.length)];
+        Numeric max = new Numeric(1);
+        Numeric f = new Numeric(0);
+        for (int len = 0; len < numerics.length; ++len) max = max.multiply(vector4.state[len]);
+        for (int _len = 0; _len < vector6.length; ++_len) {
+            for (int len = 0; len < numerics.length; ++len)
+                numerics[len] = vector3.state[len].sub(vector2.state[len].multiply(new Numeric(((_len >> len) & 1) != 0 ? 1 : 0)));
+            vector6[_len] = new Vector(numerics);
+
+            numeric3 = new Numeric(0);
+            for (int __len = 0; __len < 3; ++__len) {
+                vector5.state[__len] = vector6[_len].state[__len].multiply(vector4.state[__len]);
+                f = f.add(vector5.state[__len]);
+                for (int len = 0; len < 3; ++len)
+                    vector5.state[__len] = vector5.state[__len].multiply(len == __len ? ONE : vector2.state[len]);
+                numeric3 = numeric3.add(vector5.state[__len]);
+            }
+            System.out.println(_len + " x:" + vector2 + " b:" + vector6[_len] + " c:" + vector4 + " abc:" + vector5 + " sum:" + numeric3 + " input:" + input + " max:" + max + " f:" + f);
+        }
+
+        vector2 = new Vector( 3, 5, 7);
+        vector3 = new Vector(1, 1, 1);
+        for (int __len = 0; __len < 3; ++__len) {
+            use = vector2.state[__len];
+            numeric2 = ONE;
+            for (int len = 0; len < 3; ++len) numeric2 = numeric2.multiply(len == __len ? ONE : vector2.state[len].modulo(use));
+            vector3.state[__len] = numeric2.modulo(use);
+            System.out.printf("%s (%d): %s (%d), %s (%d), %s\n", use, __len, numeric1, elapsedTime0 - elapsedTiem, numeric2, elapsedTime1 - elapsedTime0, vector3.state[__len]);
+        }
+
+        input = vector2.state[0].multiply(vector2.state[1].multiply(vector2.state[2])).sub(new Numeric(1));
+        vector4 = new Vector(input.modulo(vector2.state[0]), input.modulo(vector2.state[1]), input.modulo(vector2.state[2]));
+        vector5 = new Vector(0, 0, 0);
+        numerics = new Numeric[vector2.state.length];
+        vector6 = new Vector[(int) Math.pow(2, numerics.length)];
+        max = new Numeric(1);
+        f = new Numeric(0);
+        for (int _len = 0; _len < vector6.length; ++_len) {
+            for (int len = 0; len < numerics.length; ++len)
+                numerics[len] = vector3.state[len].sub(vector2.state[len].multiply(new Numeric(((_len >> len) & 1) != 0 ? 1 : 0)));
+            vector6[_len] = new Vector(numerics);
+
+            numeric3 = new Numeric(0);
+            for (int __len = 0; __len < 3; ++__len) {
+                vector5.state[__len] = vector6[_len].state[__len].multiply(vector4.state[__len]);
+                f = f.add(vector5.state[__len]);
+                for (int len = 0; len < 3; ++len)
+                    vector5.state[__len] = vector5.state[__len].multiply(len == __len ? ONE : vector2.state[len]);
+                numeric3 = numeric3.add(vector5.state[__len]);
+            }
+            System.out.println(_len + " x:" + vector2 + " b:" + vector6[_len] + " c:" + vector4 + " abc:" + vector5 + " sum:" + numeric3 + " input:" + input + " max:" + max + " f:" + f);
         }
     }
 }
