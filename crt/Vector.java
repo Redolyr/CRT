@@ -14,7 +14,6 @@ public class Vector {
         this.state = state;
     }
 
-
     public Numeric innerProduct(Vector... vectors) {
         if (vectors.length == 0) throw new IllegalStateException("That Vector length is ZERO");
         if (vectors.length == 1) return innerProduct(this, vectors[0]);
@@ -93,25 +92,7 @@ public class Vector {
     }
 
     public static Numeric allProduct(Vector vector) {
-        for (Numeric numeric : vector.state) if (numeric.equals(new Numeric(0))) return new Numeric(0);
-        Numeric numeric = new Numeric(1);
-        for (Numeric numeric0 : vector.state) numeric = numeric.multiply(numeric0);
-        return numeric;
-    }
-
-    public static Numeric allProductWithMptPositions(Vector vector, int... positions) {
-        int min = 0;
-        int max = 0;
-        for (int pos : positions) {
-            if (min > pos) min = pos;
-            if (max < pos) max = pos;
-        }
-        for (int len = 0; len < vector.state.length; ++len) {
-            Numeric numeric = vector.state[len];
-            if (len < min && len > max && numeric.equals(new Numeric(0))) return new Numeric(0);
-            else if (len >= min && len <= max)
-                for (int pos : positions) if (pos != len && numeric.equals(new Numeric(0))) return new Numeric(0);
-        }
+        for (Numeric numeric : vector.state) if (isError(numeric)) return new Numeric(0);
         Numeric numeric = new Numeric(1);
         for (Numeric numeric0 : vector.state) numeric = numeric.multiply(numeric0);
         return numeric;
