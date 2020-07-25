@@ -174,5 +174,204 @@ public class Test {
             }
             System.out.println(_len + " x:" + vector2 + " b:" + vector6[_len] + " c:" + vector4 + " abc:" + vector5 + " sum:" + numeric3 + " input:" + input + " max:" + max + " f:" + f);
         }
+
+        input = vector2.state[0].multiply(vector2.state[1].multiply(vector2.state[2])).sub(new Numeric(1));
+        vector4 = new Vector(input.modulo(vector2.state[0]), input.modulo(vector2.state[1]), input.modulo(vector2.state[2]));
+        vector5 = new Vector(0, 0, 0);
+        numerics = new Numeric[vector2.state.length];
+        vector6 = new Vector[(int) Math.pow(2, numerics.length)];
+        max = new Numeric(1);
+        f = new Numeric(0);
+        /*for (int _len = 0; _len < vector6.length; ++_len) {
+            for (int len = 0; len < numerics.length; ++len) {
+                numerics[len] = vector3.state[len].sub(vector2.state[len].multiply(new Numeric(((_len >> len) & 1) != 0 ? 1 : 0)));
+                System.out.println("reg " + _len + " " + len + " " + (new Numeric(((_len >> len) & 1) != 0 ? 1 : 0)) + " " + vector2.state[len] + " " + vector3.state[len] + " " + numerics[len]);
+            }
+            vector6[_len] = new Vector(numerics);
+            System.out.println(_len + " reg b" + vector6[_len]);
+        }*/
+
+        for (int len = 0; len < vector6.length; ++len) System.out.println(len + " b: " + vector6[len]);
+
+        Vector vector7 = new Vector(1, 1, 1);
+        for (int __len = 0; __len < vector7.state.length; ++__len) {
+            for (int len = 0; len < vector7.state.length; ++len)
+                vector7.state[__len] = vector7.state[__len].multiply(len == __len ? ONE : vector2.state[len]);
+            System.out.print((__len == 0 ? "a:" : "") + vector2.state[__len] + (__len + 1 < vector7.state.length ? ", " : "\n"));
+        }
+
+        for (int len = 0; len < vector6.length; ++len) System.out.println(len + " b: " + vector6[len]);
+
+        for (int _len = 0; _len < vector6.length; ++_len) {
+            for (int len = 0; len < numerics.length; ++len) {
+                numerics[len] = vector3.state[len].sub(vector2.state[len].multiply(new Numeric(((_len >> len) & 1) != 0 ? 1 : 0)));
+                System.out.println("reg " + _len + " " + len + " " + (new Numeric(((_len >> len) & 1) != 0 ? 1 : 0)) + " " + vector2.state[len] + " " + vector3.state[len] + " " + numerics[len]);
+            }
+            vector6[_len] = new Vector(numerics);
+            System.out.println(_len + " reg b" + vector6[_len]);
+
+
+            f = new Numeric(0);
+            numeric3 = new Numeric(0);
+            for (int __len = 0; __len < 3; ++__len) {
+                vector5.state[__len] = vector6[_len].state[__len].multiply(vector7.state[__len]);
+                f = f.add(vector5.state[__len]);
+                numeric3 = numeric3.add(vector5.state[__len].multiply(vector4.state[__len]));
+                System.out.println("inner the " + __len + " " + _len + " " + f + " " + numeric3 + " " + vector5.state[__len] + ", " + vector6[_len].state[__len] + ", " + vector4.state[__len] + ", " + vector7.state[__len]);
+            }
+            System.out.println("inner " + _len + " x:" + vector2 + " a:" + vector7 + " b:" + vector6[_len] + " c:" + vector4 + " abc:" + vector5 + " sum:" + numeric3 + " input:" + input + " max:" + max + " f:" + f);
+        }
+
+        System.out.println();
+
+        Numeric[] numerics1;
+
+        vector2 = new Vector( 3, 5, 7);
+        numerics = new Numeric[vector2.state.length];
+        numerics1 = new Numeric[vector2.state.length];
+        max = new Numeric(1);
+        vector6 = new Vector[(int) Math.pow(2, numerics.length)];;
+
+        input = new Numeric(1);
+        for (int len = 0; len < vector2.state.length; ++len) input = input.multiply(vector2.state[len]);
+        input = input.sub(new Numeric(1));
+
+        Arrays.fill(numerics1, new Numeric(0));
+        vector5 = new Vector(numerics1);
+        for (int len = 0; len < numerics.length; ++len) numerics[len] = input.modulo(vector2.state[len]);
+//        vector4 = new Vector(input.modulo(vector2.state[0]), input.modulo(vector2.state[1]), input.modulo(vector2.state[2]));
+        vector4 = new Vector(numerics1);
+
+        vector7 = new Vector(1, 1, 1);
+        for (int __len = 0; __len < vector7.state.length; ++__len) {
+            for (int len = 0; len < vector7.state.length; ++len)
+                vector7.state[__len] = vector7.state[__len].multiply(len == __len ? ONE : vector2.state[len]);
+//            System.out.print((__len == 0 ? "a:" : "") + vector2.state[__len] + (__len + 1 < vector7.state.length ? ", " : "\n"));
+        }
+
+//        for (int len = 0; len < vector6.length; ++len) System.out.println(len + " b: " + vector6[len]);
+
+        for (int _len = 0; _len < vector6.length; ++_len) {
+            for (int len = 0; len < numerics.length; ++len) {
+                numerics[len] = vector3.state[len].sub(vector2.state[len].multiply(new Numeric(((_len >> len) & 1) != 0 ? 1 : 0)));
+//                System.out.println("reg " + _len + " " + len + " " + (new Numeric(((_len >> len) & 1) != 0 ? 1 : 0)) + " " + vector2.state[len] + " " + vector3.state[len] + " " + numerics[len]);
+            }
+            vector6[_len] = new Vector(numerics);
+//            System.out.println(_len + " reg b" + vector6[_len]);
+
+            f = new Numeric(0);
+            numeric3 = new Numeric(0);
+            for (int __len = 0; __len < 3; ++__len) {
+                vector5.state[__len] = vector6[_len].state[__len].multiply(vector7.state[__len]);
+                f = f.add(vector5.state[__len]);
+                numeric3 = numeric3.add(vector5.state[__len].multiply(vector4.state[__len]));
+//                System.out.println("inner the " + __len + " " + _len + " " + f + " " + numeric3 + " " + vector5.state[__len] + ", " + vector6[_len].state[__len] + ", " + vector4.state[__len] + ", " + vector7.state[__len]);
+            }
+            System.out.printf("inner \t%d(%s) \tx:%s \ta:%s \tb:%s \tc:%s \tabc:%s \tsum:%s \tinput:%s \tmax:%s \tf:%s \tf=1:%s\n", _len, Integer.toBinaryString(_len), vector2, vector7, vector6[_len], vector4, vector5, numeric3, input, max, f, f.equals(new Numeric(1)));
+        }
+
+        System.out.println();
+
+        vector2 = new Vector( 3, 5, 7);
+        max = new Numeric(1);
+
+        input = new Numeric(1);
+        for (int len = 0; len < vector2.state.length; ++len) input = input.multiply(vector2.state[len]);
+        input = input.sub(new Numeric(1));
+
+        numerics = new Numeric[vector2.state.length];
+        Arrays.fill(numerics, new Numeric(0));
+        vector5 = new Vector(numerics);
+
+        numerics = new Numeric[vector2.state.length];
+        for (int len = 0; len < numerics.length; ++len) numerics[len] = input.modulo(vector2.state[len]);
+        vector4 = new Vector(numerics);
+
+        numerics = new Numeric[vector2.state.length];
+        Arrays.fill(numerics, new Numeric(1));
+        vector7 = new Vector(numerics);
+        for (int __len = 0; __len < vector7.state.length; ++__len)
+            for (int len = 0; len < vector7.state.length; ++len)
+                vector7.state[__len] = vector7.state[__len].multiply(len == __len ? ONE : vector2.state[len]);
+
+        vector6 = new Vector[(int) Math.pow(2, vector2.state.length)];;
+        for (int _len = 0; _len < vector6.length; ++_len) {
+            numerics = new Numeric[vector2.state.length];
+            vector6[_len] = new Vector(numerics);
+            for (int len = 0; len < numerics.length; ++len)
+                vector6[_len].state[len] = vector3.state[len].sub(vector2.state[len].multiply(new Numeric(((_len >> len) & 1) != 0 ? 1 : 0)));
+        }
+
+        for (int _len = 0; _len < vector6.length; ++_len) {
+            f = new Numeric(0);
+            numeric3 = new Numeric(0);
+            for (int __len = 0; __len < vector2.state.length; ++__len) {
+                vector5.state[__len] = vector6[_len].state[__len].multiply(vector7.state[__len]);
+                f = f.add(vector5.state[__len]);
+                numeric3 = numeric3.add(vector5.state[__len].multiply(vector4.state[__len]));
+            }
+            System.out.printf("inner \t%d(%s) \tx:%s \ta:%s \tb:%s \tc:%s \tabc:%s \tsum:%s \tinput:%s \tmax:%s \tf:%s \tf=1:%s\n", _len, Integer.toBinaryString(_len), vector2, vector7, vector6[_len], vector4, vector5, numeric3, input, max, f, f.equals(new Numeric(1)));
+        }
+
+        System.out.println();
+        clip(new Vector(3, 5, 7, 11));
+    }
+
+    public static final Numeric ONE = new Numeric(1);
+    public static void clip(Vector vector2) {
+//        Vector vector2;
+        Vector vector4;
+        Vector[] vector6;
+        Vector vector5;
+        Vector vector7;
+        Numeric f;
+        Numeric max;
+        Numeric input;
+        Numeric numeric3;
+        Numeric[] numerics;
+
+//        vector2 = new Vector( 3, 5, 7);
+        max = new Numeric(1);
+
+        input = new Numeric(1);
+        for (int len = 0; len < vector2.state.length; ++len) input = input.multiply(vector2.state[len]);
+        input = input.sub(new Numeric(1));
+
+        //c
+        numerics = new Numeric[vector2.state.length];
+        for (int len = 0; len < numerics.length; ++len) numerics[len] = input.modulo(vector2.state[len]);
+        vector4 = new Vector(numerics);
+
+        //abc
+        numerics = new Numeric[vector2.state.length];
+        Arrays.fill(numerics, new Numeric(0));
+        vector5 = new Vector(numerics);
+
+        //a
+        numerics = new Numeric[vector2.state.length];
+        Arrays.fill(numerics, new Numeric(1));
+        vector7 = new Vector(numerics);
+        for (int __len = 0; __len < vector7.state.length; ++__len)
+            for (int len = 0; len < vector7.state.length; ++len)
+                vector7.state[__len] = vector7.state[__len].multiply(len == __len ? ONE : vector2.state[len]);
+
+        //b
+        vector6 = new Vector[(int) Math.pow(2, vector2.state.length)];;
+        for (int _len = 0; _len < vector6.length; ++_len) {
+            numerics = new Numeric[vector2.state.length];
+            vector6[_len] = new Vector(numerics);
+            for (int len = 0; len < numerics.length; ++len) vector6[_len].state[len] = vector7.state[len].modulo(vector2.state[len]).sub(vector2.state[len].multiply(new Numeric(((_len >> len) & 1) != 0 ? 1 : 0)));
+        }
+
+        for (int _len = 0; _len < vector6.length; ++_len) {
+            f = new Numeric(0);
+            numeric3 = new Numeric(0);
+            for (int __len = 0; __len < vector2.state.length; ++__len) {
+                vector5.state[__len] = vector6[_len].state[__len].multiply(vector7.state[__len]);
+                f = f.add(vector5.state[__len]);
+                numeric3 = numeric3.add(vector5.state[__len].multiply(vector4.state[__len]));
+            }
+            System.out.printf("inner \t%d(%s) \tx:%s \ta:%s \tb:%s \tc:%s \tabc:%s \tsum:%s \tinput:%s \tmax:%s \tf:%s \tf=1:%s\n", _len, Integer.toBinaryString(_len), vector2, vector7, vector6[_len], vector4, vector5, numeric3, input, max, f, f.equals(new Numeric(1)));
+        }
     }
 }
