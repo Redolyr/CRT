@@ -351,6 +351,13 @@ public class Test {
             for (int len = 0; len < numerics.length; ++len) vector6[_len].state[len] = vector7.state[len].modulo(vector2.state[len]).sub(vector2.state[len].multiply(new Numeric(((_len >> len) & 1) != 0 ? 1 : 0)));
         }*/
 
+        /**
+         * d(0) = 0
+         * K(i)=Product[a(i), {j, 1, i}]
+         * J(i)=b(i)*K(i)/a(i)+d(i-2)
+         * d(i-1)=J(i) mod K(i)  (J(i) mod K(i) == c(i))
+         * i>=2
+         */
         numerics = new Numeric[vector2.state.length];
         Arrays.fill(numerics, new Numeric(0));
         Vector vector8 = new Vector(numerics);
@@ -362,6 +369,8 @@ public class Test {
                 if (numeric5.modulo(vector2.state[_len]).equals(vector4.state[_len])) vector8.state[_len] = numeric5.modulo(numeric4);
             }
         }
+
+        System.out.println(vector8);
 
         vector6 = new Vector[(int) Math.pow(2, vector2.state.length)];;
         for (int _len = 0; _len < vector6.length; ++_len) {
