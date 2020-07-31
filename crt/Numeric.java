@@ -73,6 +73,10 @@ public class Numeric extends Number {
         return target.modulo(this);
     }
 
+    public Numeric negate() {
+        return new Numeric(-this.value);
+    }
+
     public boolean isNaN() {
         return Double.isNaN(this.value);
     }
