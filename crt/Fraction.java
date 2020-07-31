@@ -80,6 +80,10 @@ public class Fraction extends Numeric {
         return new Fraction(fraction.nominator.multiply(this.denominator).takeModulo(this.nominator.multiply(fraction.denominator)), this.denominator.multiply(fraction.denominator));
     }
 
+    public Numeric negate() {
+        return new Fraction(this.nominator.negate(), this.denominator);
+    }
+
     public int intValue() {
         return (int) this.longValue();
     }
