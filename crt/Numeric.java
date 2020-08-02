@@ -77,6 +77,10 @@ public class Numeric extends Number {
         return new Numeric(-this.value);
     }
 
+    public Numeric abs() {
+        return this.value > 0 ? this : this.negate();
+    }
+
     public boolean isNaN() {
         return Double.isNaN(this.value);
     }
