@@ -84,6 +84,10 @@ public class Fraction extends Numeric {
         return new Fraction(this.nominator.negate(), this.denominator);
     }
 
+    public Numeric abs() {
+        return new Fraction(this.nominator.abs(), this.denominator.abs());
+    }
+
     public int intValue() {
         return (int) this.longValue();
     }
