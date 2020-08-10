@@ -1,6 +1,7 @@
 package crt;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class Test {
 
@@ -81,69 +82,23 @@ public class Test {
      * @param vector4 c
      * @return
      */
-    public static Numeric[] clipAtB(Numeric[] vector2, Numeric[] vector4) {
-        /*Numeric[] numerics = new Numeric[vector2.length + 1];
-        numerics[0] = vector4[0];
-        for (int len = 0; len < vector2.length; ++len) {
-            if (numerics[len] == null) numerics[len] = new Numeric(0);
-            Numeric numeric4 = new Numeric(1);
-            for (int _len = 0; _len < len; ++_len) numeric4 = numeric4.multiply(vector2[_len]);
-            for (int _len = 0; _len < vector2[len].value; ++_len) {
-                Numeric numeric5 = numeric4.multiply(new Numeric(_len)).add(numerics[len]);
-                if (!numeric5.modulo(vector2[len]).equals(vector4[len])) continue;
-                numerics[len + 1] = numeric5.modulo(numeric4.multiply(vector2[len])).modulo(vector2[len]);
-            }
-        }
-
-        System.arraycopy(numerics, 1, numerics, 0, numerics.length - 1);
-        numerics = Arrays.copyOf(numerics, numerics.length - 1);
-        return numerics;*/
-
-        /*int max = 0;
-        for (Numeric numeric : vector2) max = (int) Math.max(numeric.toValue().value, max);
-        ++max;
-
-        Numeric[] numerics = new Numeric[vector2.length + 1];
-        Arrays.fill(numerics, new Numeric(0));
-        numerics[0] = vector4[0];
-        numerics[1] = ONE;
-        for (int len = 1; len < numerics.length - 1; ++len)
-            numerics[len + 1] = numerics[len].modulo(vector2[len]);
-
-        for (int _len = 0; _len < max; ++_len) {
-            for (int len = 1; len < numerics.length; ++len) {
-//                if (!numerics[len].isZero()) continue;
-                Numeric numeric = numerics[len].multiply(vector2[len - 1].add(ONE)).multiply(new Numeric(_len));
-                if (!numeric.modulo(vector2[len - 1]).equals(vector4[len - 1]) || numeric.modulo(numerics[len]).modulo(vector2[len - 1]).isZero()) continue;
-                numerics[len] = numeric.modulo(numerics[len]).modulo(vector2[len - 1]);
-            }
-        }
-
-        System.arraycopy(numerics, 1, numerics, 0, numerics.length - 1);
-        numerics = Arrays.copyOf(numerics, numerics.length - 1);
-
-        System.out.println(Arrays.toString(vector2) + " " + Arrays.toString(vector4) + " " + max + ": " + Arrays.toString(numerics));
-        return numerics;*/
-
-        Numeric[] numerics = new Numeric[vector2.length];
+    public static Numeric[][] clipAtB(Numeric[] vector2, Numeric[] vector4) {
+        Numeric[][] numerics = new Numeric[vector2.length][];
         Numeric max = ONE;
-        Arrays.fill(numerics, new Numeric(1));
         for (int len = 0; len < numerics.length; ++len) max = max.multiply(vector2[len]);
         for (int _len = 0; _len < numerics.length; ++_len) {
-//            System.out.println(_len + " " + numerics[_len]);
-            ;
             Numeric numeric1 = vector2[_len];
-            for (Numeric numeric = ONE.toValue(); numeric.toValue().value < numeric1.toValue().value; numeric = numeric.add(ONE)) {
-                System.out.println("loop " + _len + " " + numeric + " " + numeric1 + " " + max.division(numeric1).multiply(numeric) + " " + max);
+            for (Numeric numeric = ONE.toValue(); numeric.toValue().value < max.division(numeric1).toValue().value; numeric = numeric.add(ONE)) {
+//                System.out.println("loop " + _len + " " + numeric + " " + numeric1 + " " + max.division(numeric1).multiply(numeric) + " " + max);
                 if (max.division(numeric1).multiply(numeric).modulo(numeric1).equals(ONE)) {
-                    numerics[_len] = numeric;
-//                    System.out.println("on " + _len + " " + numeric);
-                    break;
+                    if (numerics[_len] == null) numerics[_len] = new Numeric[0];
+                    numerics[_len] = Arrays.copyOf(numerics[_len], numerics[_len].length + 1);
+                    numerics[_len][numerics[_len].length - 1] = numeric;
+                    continue;
                 }
             }
         }
-//        for (int len = 0; len < numerics.length; ++len) numerics[len] = numerics[len].modulo(vector2[len]);
-//        System.out.println("whose " + Arrays.toString(numerics));
+        for (Numeric[] numerics1 : numerics) System.out.println("output " + Arrays.toString(numerics1));
         return numerics;
     }
 
@@ -180,6 +135,7 @@ public class Test {
         return numerics2;
     }
 
+    /*
     public static Vector[] clipBLine(Numeric[] vector2, Numeric[] vector8) {
         Numeric[] numerics;
         Vector[] vector6 = new Vector[(int) Math.pow(2, vector2.length)];;
@@ -193,6 +149,37 @@ public class Test {
                 numerics[len] = (numerics[len].toValue().value > 0 ? numerics[len].sub(numeric4) : numerics[len].add(numeric4));
             }
         }
+        return vector6;
+    }*/
+    public static Vector[] clipBLine(Numeric[] vector2, Numeric[][] vector8) {
+        Vector[] vector6 = new Vector[0];
+        Numeric[] numerics;
+        int[] ints = new int[vector8.length];
+        long max = IntStream.range(0, vector8.length).mapToLong(len -> (ints[len] = vector8[len].length)).reduce(1, (a, b) -> a * b);
+
+        for (Numeric[] numeric : vector8) System.out.println("vec8 in " + Arrays.toString(numeric));
+
+        Numeric MAX = ONE;
+        for (int len = 0; len < vector2.length; ++len) MAX = MAX.multiply(vector2[len]);
+
+        for (int len = 0; len < max; ++len) {
+            numerics = new Numeric[vector8.length];
+            vector6 = Arrays.copyOf(vector6, vector6.length + 1);
+            vector6[vector6.length - 1] = new Vector(numerics);
+            int[] amp = new int[vector8.length];
+            for (int _len = 0; _len < vector8.length; ++_len) {
+//                System.out.println("filler " + len + " " + _len + " " + ints[_len]);
+                numerics[_len] = vector8[_len][len % ints[_len]];
+                amp[_len] = len % ints[_len];
+            }
+            Numeric numeric = new Numeric(0);
+            for (int i = 0; i < numerics.length; i++)
+                numeric = numeric.add(numerics[i].multiply(MAX.division(vector2[i])));
+            numeric = numeric.modulo(MAX);
+            System.out.println("outer " + len + " " + numeric + " " + Arrays.toString(numerics) + " " + Arrays.toString(amp));
+            if (numeric.toValue().value != 1) vector6 = Arrays.copyOf(vector6, vector6.length - 1);
+        }
+        System.out.println("vector6 " + Arrays.toString(vector6));
         return vector6;
     }
 
