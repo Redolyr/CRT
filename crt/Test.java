@@ -67,6 +67,49 @@ public class Test {
 
         for (Object[] m : matches)
             System.out.println("match base:" + m[0] + " max:" + m[1] + " match: " + m[2] + " length:" + m[3]);
+
+        System.out.println();
+
+        vectors = allComplete(new Numeric[] {
+                new Numeric(10),
+                new Numeric(11),
+                new Numeric(12),
+                new Numeric(13),
+        });
+        matches = new Object[vectors.length][2];
+
+        for (int _len = 0; _len < vectors.length; ++_len) {
+            vector = vectors[_len];
+            max = Vector.allProduct(vector);
+            match = 0;
+            length = 0;
+            for (Numeric len = max.negate(); len.compareTo(max.add(max)) < 0; len = len.add(ONE)) {
+                modulo = crt.setBaseModulo(vector, len);
+                numeric = crt.getOutput(modulo);
+                if (len.modulo(max).compareTo(numeric) == 0) ++match;
+                ++length;
+                System.out.println("test " + len + "(" + len.modulo(max) + ") input:" + modulo + " output:" + numeric + " max:" + max);
+            }
+            System.out.println("match base:" + vector + " max:" + max + " match: " + match + " length:" + length);
+            System.out.println();
+            matches[_len] = new Object[] {vector, max, match, length};
+        }
+
+        for (Object[] m : matches)
+            System.out.println("match base:" + m[0] + " max:" + m[1] + " match: " + m[2] + " length:" + m[3]);
+    }
+
+    public static Vector[] allComplete(Numeric[] maximumNumbers) {
+        Numeric max = Vector.allProduct(new Vector(maximumNumbers));
+        Numeric[] numerics;
+        Vector[] vectors = new Vector[0];
+        for (Numeric numeric = new Numeric(0); numeric.compareTo(max) < 0; numeric = numeric.add(ONE)) {
+            numerics = new Numeric[maximumNumbers.length];
+            for (int len = 0; len < numerics.length; ++len) numerics[len] = numeric.modulo(maximumNumbers[len]);
+            vectors = Arrays.copyOf(vectors, vectors.length + 1);
+            vectors[vectors.length - 1] = new Vector(numeric);
+        }
+        return vectors;
     }
 
     public static void test(Vector vector2, Numeric numeric4) {
