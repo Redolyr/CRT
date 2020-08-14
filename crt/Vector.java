@@ -15,7 +15,7 @@ public class Vector {
     }
 
     public Numeric innerProduct(Vector... vectors) {
-        if (vectors.length == 0) throw new IllegalStateException("That Vector length is ZERO");
+        if (vectors.length == 0) throw new IllegalStateException("this array length is 0");
         if (vectors.length == 1) return innerProduct(this, vectors[0]);
         return innerProduct0(this, vectors);
     }
@@ -34,7 +34,7 @@ public class Vector {
         if (vector0 == null || vector1 == null) return new Numeric(0);
         int length0 = vector0.state.length;
         int length1 = vector1.state.length;
-        if (length0 != length1) throw new IllegalArgumentException("It mismatch length of vector.");
+        if (length0 != length1) throw new IllegalArgumentException("vector wrong length.");
         Numeric[] doubles = new Numeric[length0];
         for (int len = 0; len < doubles.length; ++len) {
             if (isError(vector0.state[len]) || isError(vector1.state[len])) continue;
@@ -50,7 +50,7 @@ public class Vector {
         boolean[] product = new boolean[length];
         for (int len = 0; len < vectors.length; ++len) {
             if (vectors[len].state.length != length)
-                throw new IllegalArgumentException("It mismatch that's length of vectors element.");
+                throw new IllegalArgumentException("vector wrong length of element.");
             for (int pos = 0; pos < product.length; ++pos) {
                 if (product[pos]) continue;
                 product[pos] = vectors[len].state[pos].isZero();
@@ -79,10 +79,6 @@ public class Vector {
             }
         }
         return sum(new Vector(doubles));
-    }
-
-    public static long roundDown(double value) {
-        return (long) (value - 0.5);
     }
 
     public static Numeric sum(Vector vector) {
