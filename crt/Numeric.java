@@ -1,6 +1,6 @@
 package crt;
 
-public class Numeric extends Number {
+public class Numeric extends Number implements Comparable<Numeric> {
 
     public double value;
 
@@ -91,6 +91,11 @@ public class Numeric extends Number {
 
     public boolean isInfinite() {
         return Double.isInfinite(this.value);
+    }
+
+    public int compareTo(Numeric o) {
+        Numeric numeric = this.sub(o);
+        return numeric.toValue().value > 0 ? 1 : numeric.isZero() ? 0 : -1;
     }
 
     public boolean equals(Object obj) {
