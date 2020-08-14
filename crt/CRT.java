@@ -3,11 +3,6 @@ package crt;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-/*
- * 42-inch.
- * cathode ray tube.
- * already lit.
- */
 public class CRT {
 
     public static final Numeric ONE = new Numeric(1);
