@@ -78,7 +78,11 @@ public class CRT {
         Vector[] vector6 = new Vector[0];
         Numeric[] numerics;
         int[] ints = new int[vector8.length];
-        long max = IntStream.range(0, vector8.length).mapToLong(len -> (ints[len] = vector8[len].length)).reduce(1, (a, b) -> a * b);
+        long max = 1;
+        for (int i = 0; i < vector8.length; i++) {
+//            System.out.println("let " + Arrays.toString(vector8));
+            max = max * (ints[i] = vector8[i].length);
+        }
 
         for (int len = 0; len < max; ++len) {
             numerics = new Numeric[vector8.length];
@@ -108,6 +112,15 @@ public class CRT {
                 }
             }
         }
+        Numeric[] numerics1;
+        for (int len = 0; len < numerics.length; ++len) {
+            if (numerics[len] == null) {
+                numerics1 = new Numeric[vector2.length];
+                Arrays.fill(numerics1, new Numeric(0));
+                numerics[len] = numerics1;
+            }
+        }
+//        System.out.println("class " + Arrays.toString(vector2) + ", " + max);
         return numerics;
     }
 
