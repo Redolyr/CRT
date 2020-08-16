@@ -1,36 +1,40 @@
 package crt;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 public class Test {
 
     public static void main(String[] args) {
 
+        /*
         test(new Vector(3, 5, 7), new Numeric(328));
         test(new Vector(3, 5, 7), new Numeric(104));
         test(new Vector(3, 7, 11), new Numeric(104));
         test(new Vector(3, 5, 11), new Numeric(104));
 
         CRT crt = new CRT();
-        Vector modulo;
-        Numeric numeric;
+        final Vector[] modulo = new Vector[1];
+        final Numeric[] numeric = new Numeric[1];
 
-        modulo = crt.setBaseModulo(new Vector(3, 5, 7), new Numeric(328));
-        numeric = crt.getOutput(modulo);
-        System.out.println("test input:" + modulo + " output:" + numeric);
+        modulo[0] = crt.setBaseModulo(new Vector(3, 5, 7), new Numeric(328));
+        numeric[0] = crt.getOutput(modulo[0]);
+        System.out.println("test input:" + modulo[0] + " output:" + numeric[0]);
 
-        modulo = crt.setBaseModulo(new Vector(3, 5, 7), new Numeric(104));
-        numeric = crt.getOutput(modulo);
-        System.out.println("test input:" + modulo + " output:" + numeric);
+        modulo[0] = crt.setBaseModulo(new Vector(3, 5, 7), new Numeric(104));
+        numeric[0] = crt.getOutput(modulo[0]);
+        System.out.println("test input:" + modulo[0] + " output:" + numeric[0]);
 
-        modulo = crt.setBaseModulo(new Vector(3, 7, 11), new Numeric(104));
-        numeric = crt.getOutput(modulo);
-        System.out.println("test input:" + modulo + " output:" + numeric);
+        modulo[0] = crt.setBaseModulo(new Vector(3, 7, 11), new Numeric(104));
+        numeric[0] = crt.getOutput(modulo[0]);
+        System.out.println("test input:" + modulo[0] + " output:" + numeric[0]);
 
-        modulo = crt.setBaseModulo(new Vector(3, 5, 11), new Numeric(104));
-        numeric = crt.getOutput(modulo);
-        System.out.println("test input:" + modulo + " output:" + numeric);
+        modulo[0] = crt.setBaseModulo(new Vector(3, 5, 11), new Numeric(104));
+        numeric[0] = crt.getOutput(modulo[0]);
+        System.out.println("test input:" + modulo[0] + " output:" + numeric[0]);
 
         System.out.println();
 
@@ -42,74 +46,81 @@ public class Test {
                 new Vector(-3, -7, -11),
                 new Vector(-3, -5, -11),
         };
-        Object[][] matches = new Object[vectors.length][2];
+        final Object[][][] matches = {new Object[vectors.length][2]};
         Vector vector;
-        Numeric max;
-        int match;
-        int length;
+        final Numeric[] max = new Numeric[1];
+        final int[] match = new int[1];
+        final int[] length = new int[1];
 
         for (int _len = 0; _len < vectors.length; ++_len) {
             vector = vectors[_len];
-            max = Vector.allProduct(vector);
-            match = 0;
-            length = 0;
-            for (Numeric len = max.negate(); len.compareTo(max.add(max)) < 0; len = len.add(ONE)) {
-                modulo = crt.setBaseModulo(vector, len);
-                numeric = crt.getOutput(modulo);
-                if (len.modulo(max).compareTo(numeric) == 0) ++match;
-                ++length;
-                System.out.println("test " + len + "(" + len.modulo(max) + ") input:" + modulo + " output:" + numeric + " max:" + max);
+            max[0] = Vector.allProduct(vector);
+            match[0] = 0;
+            length[0] = 0;
+            for (Numeric len = max[0].negate(); len.compareTo(max[0].add(max[0])) < 0; len = len.add(ONE)) {
+                modulo[0] = crt.setBaseModulo(vector, len);
+                numeric[0] = crt.getOutput(modulo[0]);
+                if (len.modulo(max[0]).compareTo(numeric[0]) == 0) ++match[0];
+                ++length[0];
+                System.out.println("test " + len + "(" + len.modulo(max[0]) + ") input:" + modulo[0] + " output:" + numeric[0] + " max:" + max[0]);
             }
-            System.out.println("match base:" + vector + " max:" + max + " match: " + match + " length:" + length);
+            System.out.println("match base:" + vector + " max:" + max[0] + " match: " + match[0] + " length:" + length[0]);
             System.out.println();
-            matches[_len] = new Object[] {vector, max, match, length};
+            matches[0][_len] = new Object[] {vector, max[0], match[0], length[0]};
         }
 
-        for (Object[] m : matches)
+        for (Object[] m : matches[0])
             System.out.println("match base:" + m[0] + " max:" + m[1] + " match: " + m[2] + " length:" + m[3]);
 
         System.out.println();
+        */
 
-        vectors = allComplete(new Numeric[] {
-                new Numeric(10),
-                new Numeric(11),
-                new Numeric(12),
-                new Numeric(13),
-        });
-        matches = new Object[vectors.length][2];
+        CRT crt = new CRT();
+        final Object[][][] matches = {new Object[0][2]};
+        Vector vector;
+        final Numeric[] max = new Numeric[1];
+        final int[] match = new int[1];
+        final int[] length = new int[1];
+        final Vector[] modulo = new Vector[1];
+        final Numeric[] numeric = new Numeric[1];
 
-        for (int _len = 0; _len < vectors.length; ++_len) {
-            vector = vectors[_len];
-            max = Vector.allProduct(vector);
-            match = 0;
-            length = 0;
-            for (Numeric len = max.negate(); len.compareTo(max.add(max)) < 0; len = len.add(ONE)) {
-                modulo = crt.setBaseModulo(vector, len);
-                numeric = crt.getOutput(modulo);
-                if (len.modulo(max).compareTo(numeric) == 0) ++match;
-                ++length;
-                System.out.println("test " + len + "(" + len.modulo(max) + ") input:" + modulo + " output:" + numeric + " max:" + max);
+        matches[0] = new Object[0][4];
+
+        Consumer consumer = (v) -> {
+            Vector vec = (Vector) v;
+            max[0] = Vector.allProduct(vec);
+            match[0] = 0;
+            length[0] = 0;
+            System.out.println("fire " + max[0] + ", " + vec);
+            for (Numeric len = max[0].negate(); len.compareTo(max[0].add(max[0])) < 0; len = len.add(ONE)) {
+                modulo[0] = crt.setBaseModulo(vec, len);
+                numeric[0] = crt.getOutput(modulo[0]);
+                if (len.modulo(max[0]).compareTo(numeric[0]) == 0) ++match[0];
+                ++length[0];
+                System.out.println("test " + len + "(" + len.modulo(max[0]) + ") input:" + modulo[0] + " output:" + numeric[0] + " max:" + max[0]);
             }
-            System.out.println("match base:" + vector + " max:" + max + " match: " + match + " length:" + length);
+            System.out.println("match base:" + vec + " max:" + max[0] + " match: " + match[0] + " length:" + length[0]);
             System.out.println();
-            matches[_len] = new Object[] {vector, max, match, length};
-        }
+            matches[0] = Arrays.copyOf(matches[0], matches[0].length + 1);
+            matches[0][matches[0].length - 1] = new Object[]{vec, max[0], match[0], length[0]};
+        };
 
-        for (Object[] m : matches)
+        allComplete(new Numeric[] {new Numeric(10), new Numeric(11), new Numeric(12)}, consumer);
+
+        for (Object[] m : matches[0])
             System.out.println("match base:" + m[0] + " max:" + m[1] + " match: " + m[2] + " length:" + m[3]);
     }
 
-    public static Vector[] allComplete(Numeric[] maximumNumbers) {
+    public static void allComplete(Numeric[] maximumNumbers, Consumer consumer) {
         Numeric max = Vector.allProduct(new Vector(maximumNumbers));
         Numeric[] numerics;
-        Vector[] vectors = new Vector[0];
+        System.out.println("all " + Arrays.toString(maximumNumbers));
         for (Numeric numeric = new Numeric(0); numeric.compareTo(max) < 0; numeric = numeric.add(ONE)) {
             numerics = new Numeric[maximumNumbers.length];
             for (int len = 0; len < numerics.length; ++len) numerics[len] = numeric.modulo(maximumNumbers[len]);
-            vectors = Arrays.copyOf(vectors, vectors.length + 1);
-            vectors[vectors.length - 1] = new Vector(numeric);
+            System.out.println("complete " + new Vector(numerics));
+            consumer.accept(new Vector(numerics));
         }
-        return vectors;
     }
 
     public static void test(Vector vector2, Numeric numeric4) {
