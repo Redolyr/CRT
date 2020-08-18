@@ -148,7 +148,7 @@ public class Test {
 
     public static PrintStream printStream;
 
-    public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-DD");
+    public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public static File getNextFile() {
         File path = new File(PATH);
