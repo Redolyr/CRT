@@ -1,6 +1,13 @@
 package crt;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Currency;
+import java.util.Date;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -75,6 +82,8 @@ public class Test {
         System.out.println();
         */
 
+        System.out.println("boot");
+
         CRT crt = new CRT();
         final Object[][][] matches = {new Object[0][2]};
         Vector vector;
@@ -84,6 +93,8 @@ public class Test {
         final Vector[] modulo = new Vector[1];
         final Numeric[] numeric = new Numeric[1];
 
+        Numeric[] complete = new Numeric[] {new Numeric(10), new Numeric(11), new Numeric(12)};
+
         matches[0] = new Object[0][4];
 
         Consumer consumer = (v) -> {
@@ -91,24 +102,88 @@ public class Test {
             max[0] = Vector.allProduct(vec);
             match[0] = 0;
             length[0] = 0;
-            System.out.println("fire " + max[0] + ", " + vec);
+            log("fire " + max[0] + ", " + vec);
             for (Numeric len = max[0].negate(); len.compareTo(max[0].add(max[0])) < 0; len = len.add(ONE)) {
                 modulo[0] = crt.setBaseModulo(vec, len);
                 numeric[0] = crt.getOutput(modulo[0]);
                 if (len.modulo(max[0]).compareTo(numeric[0]) == 0) ++match[0];
                 ++length[0];
-                System.out.println("test " + len + "(" + len.modulo(max[0]) + ") input:" + modulo[0] + " output:" + numeric[0] + " max:" + max[0]);
+                log("test " + len + "(" + len.modulo(max[0]) + ") input:" + modulo[0] + " output:" + numeric[0] + " max:" + max[0]);
             }
-            System.out.println("match base:" + vec + " max:" + max[0] + " match: " + match[0] + " length:" + length[0]);
-            System.out.println();
+            log("match base:" + vec + " max:" + max[0] + " match: " + match[0] + " length:" + length[0]);
+            log();
             matches[0] = Arrays.copyOf(matches[0], matches[0].length + 1);
             matches[0][matches[0].length - 1] = new Object[]{vec, max[0], match[0], length[0]};
         };
 
-        allComplete(new Numeric[] {new Numeric(10), new Numeric(11), new Numeric(12)}, consumer);
+        System.out.println("pre all complete");
 
-        for (Object[] m : matches[0])
-            System.out.println("match base:" + m[0] + " max:" + m[1] + " match: " + m[2] + " length:" + m[3]);
+        allComplete(complete, consumer);
+
+        Object[][] objs = new Object[0][0];
+
+        System.out.println("show match");
+
+        for (Object[] m : matches[0]) {
+            log("match base:" + m[0] + " max:" + m[1] + " match: " + m[2] + " length:" + m[3]);
+            if (m[2].equals(m[3])) {
+                objs = Arrays.copyOf(objs, objs.length + 1);
+                objs[objs.length - 1] = m;
+            }
+        }
+
+        System.out.println("show match on");
+
+        for (Object[] m : objs)
+            log("match on base:" + m[0] + " max:" + m[1] + " match: " + m[2] + " length:" + m[3]);
+    }
+
+    public static final long FILE_SIZE = 1024L * 1024L;
+
+    public static String PATH = ".\\all";
+
+    public static String STARTS_WITH_REGEX_FILE_NAME = "all_test";
+
+    public static File CURRENT_FILE;
+
+    public static PrintStream printStream;
+
+    public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-DD");
+
+    public static File getNextFile() {
+        File path = new File(PATH);
+        if (!path.exists()) path.mkdirs();
+        int count = path.listFiles(f -> f.getName().startsWith(STARTS_WITH_REGEX_FILE_NAME) && f.getName().endsWith(".log")).length;
+        return new File(PATH, STARTS_WITH_REGEX_FILE_NAME + count + "-" + simpleDateFormat.format(new Date()) + ".log");
+    }
+
+    public static void log(String log) {
+        try {
+            log0(log);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void log() {
+        try {
+            log0("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void log0(String log) throws IOException {
+        if (printStream == null) {
+            CURRENT_FILE = getNextFile();
+            printStream = new PrintStream(CURRENT_FILE);
+        } else if (FILE_SIZE < CURRENT_FILE.length()) {
+            System.out.println((CURRENT_FILE != null ? CURRENT_FILE.getName() : "unnamed") + " " + (CURRENT_FILE != null ? CURRENT_FILE.length() : -1) + " " + (((CURRENT_FILE != null ? CURRENT_FILE.length() : -1)) > FILE_SIZE));
+            printStream.close();
+            CURRENT_FILE = getNextFile();
+            printStream = new PrintStream(CURRENT_FILE);
+        }
+        printStream.println(log);
     }
 
     public static void allComplete(Numeric[] maximumNumbers, Consumer consumer) {
@@ -118,7 +193,7 @@ public class Test {
         for (Numeric numeric = new Numeric(0); numeric.compareTo(max) < 0; numeric = numeric.add(ONE)) {
             numerics = new Numeric[maximumNumbers.length];
             for (int len = 0; len < numerics.length; ++len) numerics[len] = numeric.modulo(maximumNumbers[len]);
-            System.out.println("complete " + new Vector(numerics));
+            log("complete " + new Vector(numerics));
             consumer.accept(new Vector(numerics));
         }
     }
@@ -128,7 +203,7 @@ public class Test {
         Vector clipInput = new Vector(clipInput(vector2.state, numeric4.modulo(max), max));
         Vector vector6 = clip(vector2, numeric4, max);
         Numeric output = clipOutput(vector2.state, clipInput.state, vector6.state, max);
-        System.out.println("synchronized a:" + vector2 + " b:" + vector6 + " c:" + clipInput + " input:" + numeric4 + "(" + numeric4.modulo(max) + ")" + " output:" + output + " max:" + max);
+        log("synchronized a:" + vector2 + " b:" + vector6 + " c:" + clipInput + " input:" + numeric4 + "(" + numeric4.modulo(max) + ")" + " output:" + output + " max:" + max);
     }
 
     public static final Numeric ONE = new Numeric(1);
@@ -222,7 +297,7 @@ public class Test {
                 }
             }
         }
-        for (Numeric[] numerics1 : numerics) System.out.println("output " + Arrays.toString(numerics1));
+        for (Numeric[] numerics1 : numerics) log("output " + Arrays.toString(numerics1));
         return numerics;
     }
 
@@ -232,7 +307,7 @@ public class Test {
         int[] ints = new int[vector8.length];
         long max = IntStream.range(0, vector8.length).mapToLong(len -> (ints[len] = vector8[len].length)).reduce(1, (a, b) -> a * b);
 
-        for (Numeric[] numeric : vector8) System.out.println("vec8 in " + Arrays.toString(numeric));
+        for (Numeric[] numeric : vector8) log("vec8 in " + Arrays.toString(numeric));
 
         for (int len = 0; len < max; ++len) {
             numerics = new Numeric[vector8.length];
@@ -246,7 +321,7 @@ public class Test {
             numeric = numeric.modulo(MAX);
             if (numeric.toValue().value != 1) vector6 = Arrays.copyOf(vector6, vector6.length - 1);
         }
-        System.out.println("vector6 " + Arrays.toString(vector6));
+        log("vector6 " + Arrays.toString(vector6));
         return vector6;
     }
 }
