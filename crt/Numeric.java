@@ -59,7 +59,10 @@ public class Numeric extends Number implements Comparable<Numeric> {
      * @return
      */
     public Numeric modulo(Numeric numeric) {
-        return new Numeric(this.value % numeric.value);
+        double d = this.value % numeric.value;
+        d = d - numeric.value * ((Math.sqrt(d * d) / d - 1) / 2);
+        if (Double.isNaN(d) || Double.isInfinite(d) || d == 0) return new Numeric(0);
+        return new Numeric(d);
     }
 
     /**
