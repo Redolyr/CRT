@@ -17,81 +17,12 @@ public class Test {
 
     public static void main(String[] args) {
 
-        /*
-        test(new Vector(3, 5, 7), new Numeric(328));
-        test(new Vector(3, 5, 7), new Numeric(104));
-        test(new Vector(3, 7, 11), new Numeric(104));
-        test(new Vector(3, 5, 11), new Numeric(104));
-
-        CRT crt = new CRT();
-        final Vector[] modulo = new Vector[1];
-        final Numeric[] numeric = new Numeric[1];
-
-        modulo[0] = crt.setBaseModulo(new Vector(3, 5, 7), new Numeric(328));
-        numeric[0] = crt.getOutput(modulo[0]);
-        System.out.println("test input:" + modulo[0] + " output:" + numeric[0]);
-
-        modulo[0] = crt.setBaseModulo(new Vector(3, 5, 7), new Numeric(104));
-        numeric[0] = crt.getOutput(modulo[0]);
-        System.out.println("test input:" + modulo[0] + " output:" + numeric[0]);
-
-        modulo[0] = crt.setBaseModulo(new Vector(3, 7, 11), new Numeric(104));
-        numeric[0] = crt.getOutput(modulo[0]);
-        System.out.println("test input:" + modulo[0] + " output:" + numeric[0]);
-
-        modulo[0] = crt.setBaseModulo(new Vector(3, 5, 11), new Numeric(104));
-        numeric[0] = crt.getOutput(modulo[0]);
-        System.out.println("test input:" + modulo[0] + " output:" + numeric[0]);
-
-        System.out.println();
-
-        Vector[] vectors = new Vector[] {
-                new Vector(3, 5, 7),
-                new Vector(3, 7, 11),
-                new Vector(3, 5, 11),
-                new Vector(-3, -5, -7),
-                new Vector(-3, -7, -11),
-                new Vector(-3, -5, -11),
-        };
-        final Object[][][] matches = {new Object[vectors.length][2]};
-        Vector vector;
-        final Numeric[] max = new Numeric[1];
-        final int[] match = new int[1];
-        final int[] length = new int[1];
-
-        for (int _len = 0; _len < vectors.length; ++_len) {
-            vector = vectors[_len];
-            max[0] = Vector.allProduct(vector);
-            match[0] = 0;
-            length[0] = 0;
-            for (Numeric len = max[0].negate(); len.compareTo(max[0].add(max[0])) < 0; len = len.add(ONE)) {
-                modulo[0] = crt.setBaseModulo(vector, len);
-                numeric[0] = crt.getOutput(modulo[0]);
-                if (len.modulo(max[0]).compareTo(numeric[0]) == 0) ++match[0];
-                ++length[0];
-                System.out.println("test " + len + "(" + len.modulo(max[0]) + ") input:" + modulo[0] + " output:" + numeric[0] + " max:" + max[0]);
-            }
-            System.out.println("match base:" + vector + " max:" + max[0] + " match: " + match[0] + " length:" + length[0]);
-            System.out.println();
-            matches[0][_len] = new Object[] {vector, max[0], match[0], length[0]};
-        }
-
-        for (Object[] m : matches[0])
-            System.out.println("match base:" + m[0] + " max:" + m[1] + " match: " + m[2] + " length:" + m[3]);
-
-        System.out.println();
-        */
-
         System.out.println("boot");
+
+        toNextPath();
 
         CRT crt = new CRT();
         final Object[][][] matches = {new Object[0][2]};
-        Vector vector;
-        final Numeric[] max = new Numeric[1];
-        final int[] match = new int[1];
-        final int[] length = new int[1];
-        final Vector[] modulo = new Vector[1];
-        final Numeric[] numeric = new Numeric[1];
 
         Numeric[] complete = new Numeric[] {new Numeric(10), new Numeric(11), new Numeric(12)};
 
@@ -99,21 +30,25 @@ public class Test {
 
         Consumer consumer = (v) -> {
             Vector vec = (Vector) v;
-            max[0] = Vector.allProduct(vec);
-            match[0] = 0;
-            length[0] = 0;
-            log("fire " + max[0] + ", " + vec);
-            for (Numeric len = max[0].negate(); len.compareTo(max[0].add(max[0])) < 0; len = len.add(ONE)) {
-                modulo[0] = crt.setBaseModulo(vec, len);
-                numeric[0] = crt.getOutput(modulo[0]);
-                if (len.modulo(max[0]).compareTo(numeric[0]) == 0) ++match[0];
-                ++length[0];
-                log("test " + len + "(" + len.modulo(max[0]) + ") input:" + modulo[0] + " output:" + numeric[0] + " max:" + max[0]);
+            Numeric max = Vector.allProduct(vec);
+            int match = 0;
+            int length = 0;
+            Vector modulo;
+            Numeric numeric;
+            log("fire " + max + ", " + vec);
+            for (Numeric len = max.negate(); len.compareTo(max.add(max)) < 0; len = len.add(ONE)) {
+                modulo = crt.setBaseModulo(vec, len);
+                numeric = crt.getOutput(modulo);
+                if (len.modulo(max).compareTo(numeric) == 0) ++match;
+                ++length;
+                log("test \t" + len + "(" + len.modulo(max) + ") \tinput:" + modulo + " \toutput:" + numeric + " \tmax:" + max /*+ " --- " + crt*/);
             }
-            log("match base:" + vec + " max:" + max[0] + " match: " + match[0] + " length:" + length[0]);
+            log("match \tbase:" + vec + " \tmax:" + max + " \tmatch: " + match + " \tlength:" + length + " \tproduct:" + crt.getProduct());
             log();
+            Vector vector = crt.getProduct();
+            if (vector != null && vector.state != null) vector = new Vector(Arrays.copyOf(vector.state, vector.state.length));
             matches[0] = Arrays.copyOf(matches[0], matches[0].length + 1);
-            matches[0][matches[0].length - 1] = new Object[]{vec, max[0], match[0], length[0]};
+            matches[0][matches[0].length - 1] = new Object[]{vec, max, match, length, vector};
         };
 
         System.out.println("pre all complete");
@@ -125,17 +60,21 @@ public class Test {
         System.out.println("show match");
 
         for (Object[] m : matches[0]) {
-            log("match base:" + m[0] + " max:" + m[1] + " match: " + m[2] + " length:" + m[3]);
+            log("match \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + (m[2].equals(m[3])));
             if (m[2].equals(m[3])) {
                 objs = Arrays.copyOf(objs, objs.length + 1);
                 objs[objs.length - 1] = m;
             }
         }
 
+        Test.log("match base count " + matches[0].length);
+
         System.out.println("show match on");
 
         for (Object[] m : objs)
-            log("match on base:" + m[0] + " max:" + m[1] + " match: " + m[2] + " length:" + m[3]);
+            log("match on \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + (m[2].equals(m[3])));
+
+        Test.log("match on base count " + objs.length);
     }
 
     public static final long FILE_SIZE = 1024L * 1024L;
@@ -150,11 +89,18 @@ public class Test {
 
     public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    public static File CURRENT_PATH;
+
+    public static void toNextPath() {
+        File parent = new File(PATH).getAbsoluteFile();
+        String PATH0 = simpleDateFormat.format(new Date()) + "-data";
+        CURRENT_PATH = new File(PATH + "\\" + PATH0 + (parent.listFiles(n -> n.getName().startsWith(PATH0)).length)).getAbsoluteFile();
+    }
+
     public static File getNextFile() {
-        File path = new File(PATH);
-        if (!path.exists()) path.mkdirs();
-        int count = path.listFiles(f -> f.getName().startsWith(STARTS_WITH_REGEX_FILE_NAME) && f.getName().endsWith(".log")).length;
-        return new File(PATH, STARTS_WITH_REGEX_FILE_NAME + count + "-" + simpleDateFormat.format(new Date()) + ".log");
+        if (!CURRENT_PATH.exists()) CURRENT_PATH.mkdirs();
+        int count = CURRENT_PATH.listFiles(f -> f.getName().startsWith(STARTS_WITH_REGEX_FILE_NAME) && f.getName().endsWith(".log")).length;
+        return new File(CURRENT_PATH, STARTS_WITH_REGEX_FILE_NAME + count + "-" + simpleDateFormat.format(new Date()) + ".log");
     }
 
     public static void log(String log) {
@@ -174,6 +120,7 @@ public class Test {
     }
 
     public static void log0(String log) throws IOException {
+        System.out.println(log);
         if (printStream == null) {
             CURRENT_FILE = getNextFile();
             printStream = new PrintStream(CURRENT_FILE);
