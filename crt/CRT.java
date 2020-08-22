@@ -36,6 +36,19 @@ public class CRT {
         return this.max;
     }
 
+    public Vector getProduct() {
+        return product;
+    }
+
+    @Override
+    public String toString() {
+        return ("{'CRT':{"
+                + "'baseNumber':" + this.baseNumber
+                + ", 'product':" + this.product
+                + ", 'max':'" + this.max + "'"
+                + "}}").replace("'", "\"");
+    }
+
     private static Vector clip(Vector vector2, Numeric input, Numeric max) {
         Numeric[] numerics;
 
@@ -71,6 +84,8 @@ public class CRT {
             if (!f.modulo(max).equals(ONE)) continue;
             export = vector6[_len];
         }
+//        for (Vector vector : vector6) Test.log("export vec6 " + vector);
+//        Test.log("export " + export);
         return export;
     }
 
@@ -95,6 +110,7 @@ public class CRT {
             }
             numeric = numeric.modulo(MAX);
             if (numeric.toValue().value != 1) vector6 = Arrays.copyOf(vector6, vector6.length - 1);
+//            Test.log("vec6 " + len + " " + numeric);
         }
         return vector6;
     }
