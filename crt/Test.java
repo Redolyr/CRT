@@ -17,6 +17,19 @@ public class Test {
 
     public static void main(String[] args) {
 
+        System.out.println("3 < 5 max " + CRT.max(3, 5));
+        System.out.println("3 < 5 min " + CRT.min(3, 5));
+        System.out.println("5 < 3 not_max " + CRT.not_max(5, 3));
+        System.out.println("5 < 3 not_min " + CRT.not_min(5, 3));
+        System.out.println("3 < 3 max " + CRT.max(3, 3));
+        System.out.println("3 < 3 min " + CRT.min(3, 3));
+        System.out.println("3 < 3 not_max " + CRT.not_max(3, 3));
+        System.out.println("3 < 3 not_min " + CRT.not_min(3, 3));
+        System.out.println(CRT.min(3, 5) + CRT.not_min(3, 5));
+        System.out.println(CRT.min(5, 3) + CRT.not_min(5, 3));
+
+//        if (true) return;
+
         System.out.println("boot");
 
         toNextPath();
