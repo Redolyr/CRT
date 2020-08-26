@@ -77,7 +77,7 @@ public class CRT {
             Arrays.fill(numerics, new Numeric(0));
 
             Numeric f = new Numeric(0);
-            for (int __len = 0; __len < vector2.state.length; ++__len) {
+            for (int __len = 0; __len < min(vector2.state.length, vector6[_len].state.length) + not_min(vector2.state.length, vector6[_len].state.length); ++__len) {
                 numerics[__len] = vector6[_len].state[__len].multiply(vector7.state[__len]).multiply(vector4.state[__len]).modulo(vector2.state[__len]);
                 f = f.add(vector6[_len].state[__len].multiply(vector7.state[__len]));
             }
@@ -127,22 +127,22 @@ public class CRT {
                     continue;
                 }
             }
+//            Test.log("most index:" + _len + " max:" + max + " div:" + numeric1 + " mod:" + numeric1);
         }
-        Numeric[] numerics1;
+        for (Numeric[] numeric : numerics) Test.log("muscle " + Arrays.toString(numeric));
+        Numeric[][] numerics1 = new Numeric[0][];
         for (int len = 0; len < numerics.length; ++len) {
-            if (numerics[len] == null) {
-                numerics1 = new Numeric[vector2.length];
-                Arrays.fill(numerics1, new Numeric(0));
-                numerics[len] = numerics1;
-            }
+            if (numerics[len] == null) continue;
+            numerics1 = Arrays.copyOf(numerics1, numerics1.length + 1);
+            numerics1[numerics1.length - 1] = numerics[len];
         }
-//        System.out.println("class " + Arrays.toString(vector2) + ", " + max);
-        return numerics;
+        System.out.println("class " + Arrays.toString(vector2) + ", " + max);
+        return numerics1;
     }
 
     private static Numeric clipOutput(Numeric[] vector2, Numeric[] vector9, Numeric[] vector10, Numeric max) {
         Numeric numeric5 = new Numeric(0);
-        for (int len = 0; len < vector2.length; ++len)
+        for (int len = 0; len < min(vector2.length, vector10.length) + not_min(vector2.length, vector10.length); ++len)
             numeric5 = numeric5.add(max.division(vector2[len]).multiply(vector9[len]).multiply(vector10[len]));
         return numeric5.modulo(max);
     }
@@ -151,5 +151,34 @@ public class CRT {
         Numeric[] numerics2 = new Numeric[vector2.state.length];
         for (int len = 0; len < numerics2.length; ++len) numerics2[len] = numeric4.modulo(vector2.state[len]);
         return new Vector(numerics2);
+    }
+
+    public static int max(int src0, int src1) {
+        int max = Integer.MAX_VALUE;
+        int bit = max^(src0 + (max^src1));
+        bit = (int) (bit / Math.sqrt(bit * bit));
+        return (bit + 1) / 2 * src1;
+    }
+
+    public static int min(int src0, int src1) {
+        int max = Integer.MAX_VALUE;
+        int bit = max^(src0 + (max^src1));
+        bit = (int) (bit / Math.sqrt(bit * bit));
+//        System.out.println("min " + bit + " " + (bit - 1));
+        return (bit + 1) / 2 * src0;
+    }
+
+    public static int not_max(int src0, int src1) {
+        int max = Integer.MAX_VALUE;
+        int bit = max^(src0 + (max^src1));
+        bit = (int) (bit / Math.sqrt(bit * bit));
+        return -(bit - 1) / 2 * src1;
+    }
+
+    public static int not_min(int src0, int src1) {
+        int max = Integer.MAX_VALUE;
+        int bit = max^(src0 + (max^src1));
+        bit = (int) (bit / Math.sqrt(bit * bit));
+        return - (bit - 1) / 2 * src0;
     }
 }
