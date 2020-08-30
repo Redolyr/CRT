@@ -30,64 +30,88 @@ public class Test {
 
 //        if (true) return;
 
-        System.out.println("boot");
+        try {
+            System.out.println("boot");
 
-        toNextPath();
+            toNextPath();
 
-        CRT crt = new CRT();
-        final Object[][][] matches = {new Object[0][2]};
+            CRT crt = new CRT();
+            final Object[][][] matches = {new Object[0][2]};
 
-        Numeric[] complete = new Numeric[] {new Numeric(10), new Numeric(11), new Numeric(12)};
+            Numeric[] complete = new Numeric[]{new Numeric(10), new Numeric(11), new Numeric(12)};
 
-        matches[0] = new Object[0][4];
+            matches[0] = new Object[0][4];
 
-        Consumer consumer = (v) -> {
-            Vector vec = (Vector) v;
-            Numeric max = Vector.allProduct(vec);
-            int match = 0;
-            int length = 0;
-            Vector modulo;
-            Numeric numeric;
-            log("fire " + max + ", " + vec);
-            for (Numeric len = max.negate(); len.compareTo(max.add(max)) < 0; len = len.add(ONE)) {
-                modulo = crt.setBaseModulo(vec, len);
-                numeric = crt.getOutput(modulo);
-                if (len.modulo(max).compareTo(numeric) == 0) ++match;
-                ++length;
-                log("test \t" + len + "(" + len.modulo(max) + ") \tinput:" + modulo + " \toutput:" + numeric + " \tmax:" + max /*+ " --- " + crt*/);
+            Consumer consumer = (v) -> {
+                Vector vec = (Vector) v;
+                Numeric max = Vector.allProduct(vec);
+                int match = 0;
+                int length = 0;
+                Vector modulo;
+                Numeric numeric;
+                log("fire " + max + ", " + vec);
+                for (Numeric len = max.negate(); len.compareTo(max.add(max)) < 0; len = len.add(ONE)) {
+                    modulo = crt.setBaseModulo(vec, len);
+                    numeric = crt.getOutput(modulo);
+                    if (len.modulo(max).compareTo(numeric) == 0) ++match;
+                    ++length;
+                    if (len.modulo(new Numeric(100)).equals(new Numeric(0)))
+                        log("test \t" + len + "(" + len.modulo(max) + ") \tinput:" + modulo + " \toutput:" + numeric + " \tmax:" + max /*+ " --- " + crt*/);
+                }
+                log("match \tbase:" + vec + " \tmax:" + max + " \tmatch: " + match + " \tlength:" + length + " \tproduct:" + crt.getProduct());
+                log();
+                Vector vector = crt.getProduct();
+                if (vector != null && vector.state != null)
+                    vector = new Vector(Arrays.copyOf(vector.state, vector.state.length));
+                matches[0] = Arrays.copyOf(matches[0], matches[0].length + 1);
+                matches[0][matches[0].length - 1] = new Object[]{vec, max, match, length, vector};
+            };
+
+            System.out.println("pre all complete");
+
+            try {
+                allComplete(complete, consumer);
+            } catch (OutOfMemoryError error) {
+
+                log("\n\n\nOut of Memory Error");
+
+                if (printStream != null) {
+                    printStream.close();
+                    printStream = null;
+                }
             }
-            log("match \tbase:" + vec + " \tmax:" + max + " \tmatch: " + match + " \tlength:" + length + " \tproduct:" + crt.getProduct());
-            log();
-            Vector vector = crt.getProduct();
-            if (vector != null && vector.state != null) vector = new Vector(Arrays.copyOf(vector.state, vector.state.length));
-            matches[0] = Arrays.copyOf(matches[0], matches[0].length + 1);
-            matches[0][matches[0].length - 1] = new Object[]{vec, max, match, length, vector};
-        };
 
-        System.out.println("pre all complete");
+            Object[][] objs = new Object[0][0];
 
-        allComplete(complete, consumer);
+            System.out.println("show match");
 
-        Object[][] objs = new Object[0][0];
+            for (Object[] m : matches[0]) {
+                log("match \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + (m[2].equals(m[3])));
+                if (m[2].equals(m[3])) {
+                    objs = Arrays.copyOf(objs, objs.length + 1);
+                    objs[objs.length - 1] = m;
+                }
+            }
 
-        System.out.println("show match");
+            Test.log("match base count " + matches[0].length);
 
-        for (Object[] m : matches[0]) {
-            log("match \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + (m[2].equals(m[3])));
-            if (m[2].equals(m[3])) {
-                objs = Arrays.copyOf(objs, objs.length + 1);
-                objs[objs.length - 1] = m;
+            System.out.println("show match on");
+
+            for (Object[] m : objs)
+                log("match on \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + (m[2].equals(m[3])));
+
+            Test.log("match on base count " + objs.length);
+        } catch (OutOfMemoryError error) {
+
+            log("\n\n\nOut of Memory Error");
+            log("Out of Memory Error");
+
+
+            if (printStream != null) {
+                printStream.close();
+                printStream = null;
             }
         }
-
-        Test.log("match base count " + matches[0].length);
-
-        System.out.println("show match on");
-
-        for (Object[] m : objs)
-            log("match on \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + (m[2].equals(m[3])));
-
-        Test.log("match on base count " + objs.length);
     }
 
     public static final long FILE_SIZE = 1024L * 1024L;
