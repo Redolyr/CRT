@@ -95,8 +95,9 @@ public class CRT {
         int[] ints = new int[vector8.length];
         long max = 1;
         for (int i = 0; i < vector8.length; i++) {
-//            System.out.println("let " + Arrays.toString(vector8));
-            max = max * (ints[i] = vector8[i].length);
+//            System.out.println("let " + vector8.length + ": " + Arrays.toString(vector8));
+//            System.out.println(ints.length);
+            max = max * (ints[i] = (vector8[i] == null ? 0 : vector8[i].length));
         }
 
         for (int len = 0; len < max; ++len) {
@@ -120,24 +121,22 @@ public class CRT {
         for (int _len = 0; _len < numerics.length; ++_len) {
             Numeric numeric1 = vector2[_len];
             for (Numeric numeric = ONE; numeric.compareTo(max.division(numeric1)) < 0; numeric = numeric.add(ONE)) {
-                if (max.division(numeric1).multiply(numeric).modulo(numeric1).equals(ONE)) {
-                    if (numerics[_len] == null) numerics[_len] = new Numeric[0];
-                    numerics[_len] = Arrays.copyOf(numerics[_len], numerics[_len].length + 1);
-                    numerics[_len][numerics[_len].length - 1] = numeric;
-                    continue;
-                }
+                if (numerics[_len] == null) numerics[_len] = new Numeric[0];
+                numerics[_len] = Arrays.copyOf(numerics[_len], numerics[_len].length + 1);
+                numerics[_len][numerics[_len].length - 1] = max.division(numeric1).multiply(numeric).modulo(numeric1).equals(ONE) ? numeric : new Numeric(0);
             }
 //            Test.log("most index:" + _len + " max:" + max + " div:" + numeric1 + " mod:" + numeric1);
         }
-        for (Numeric[] numeric : numerics) Test.log("muscle " + Arrays.toString(numeric));
-        Numeric[][] numerics1 = new Numeric[0][];
+        return numerics;
+//        for (Numeric[] numeric : numerics) Test.log("muscle " + Arrays.toString(numeric));
+        /*Numeric[][] numerics1 = new Numeric[0][];
         for (int len = 0; len < numerics.length; ++len) {
             if (numerics[len] == null) continue;
             numerics1 = Arrays.copyOf(numerics1, numerics1.length + 1);
             numerics1[numerics1.length - 1] = numerics[len];
-        }
-        System.out.println("class " + Arrays.toString(vector2) + ", " + max);
-        return numerics1;
+        }*/
+//        System.out.println("class " + Arrays.toString(vector2) + ", " + max);
+//        return numerics1;
     }
 
     private static Numeric clipOutput(Numeric[] vector2, Numeric[] vector9, Numeric[] vector10, Numeric max) {
