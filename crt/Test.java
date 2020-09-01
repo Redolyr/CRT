@@ -17,19 +17,6 @@ public class Test {
 
     public static void main(String[] args) {
 
-        System.out.println("3 < 5 max " + CRT.max(3, 5));
-        System.out.println("3 < 5 min " + CRT.min(3, 5));
-        System.out.println("5 < 3 not_max " + CRT.not_max(5, 3));
-        System.out.println("5 < 3 not_min " + CRT.not_min(5, 3));
-        System.out.println("3 < 3 max " + CRT.max(3, 3));
-        System.out.println("3 < 3 min " + CRT.min(3, 3));
-        System.out.println("3 < 3 not_max " + CRT.not_max(3, 3));
-        System.out.println("3 < 3 not_min " + CRT.not_min(3, 3));
-        System.out.println(CRT.min(3, 5) + CRT.not_min(3, 5));
-        System.out.println(CRT.min(5, 3) + CRT.not_min(5, 3));
-
-//        if (true) return;
-
         try {
             System.out.println("boot");
 
@@ -38,7 +25,7 @@ public class Test {
             CRT crt = new CRT();
             final Object[][][] matches = {new Object[0][2]};
 
-            Numeric[] complete = new Numeric[]{new Numeric(10), new Numeric(11), new Numeric(12)};
+            Numeric[] complete = new Numeric[]{new Numeric(4), new Numeric(5), new Numeric(6)};
 
             matches[0] = new Object[0][4];
 
@@ -86,8 +73,8 @@ public class Test {
             System.out.println("show match");
 
             for (Object[] m : matches[0]) {
-                log("match \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + (m[2].equals(m[3])));
-                if (m[2].equals(m[3])) {
+                log("match \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + (!m[2].equals(new Numeric(0)) && m[2].equals(m[3]) && !((Numeric) m[1]).isZero()));
+                if (!m[2].equals(new Numeric(0)) && m[2].equals(m[3]) && !((Numeric) m[1]).isZero()) {
                     objs = Arrays.copyOf(objs, objs.length + 1);
                     objs[objs.length - 1] = m;
                 }
@@ -98,7 +85,7 @@ public class Test {
             System.out.println("show match on");
 
             for (Object[] m : objs)
-                log("match on \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + (m[2].equals(m[3])));
+                log("match on \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + (!m[2].equals(new Numeric(0)) && m[2].equals(m[3]) && !((Numeric) m[1]).isZero()));
 
             Test.log("match on base count " + objs.length);
         } catch (OutOfMemoryError error) {
@@ -182,130 +169,5 @@ public class Test {
         }
     }
 
-    public static void test(Vector vector2, Numeric numeric4) {
-        Numeric max = Vector.allProduct(vector2);
-        Vector clipInput = new Vector(clipInput(vector2.state, numeric4.modulo(max), max));
-        Vector vector6 = clip(vector2, numeric4, max);
-        Numeric output = clipOutput(vector2.state, clipInput.state, vector6.state, max);
-        log("synchronized a:" + vector2 + " b:" + vector6 + " c:" + clipInput + " input:" + numeric4 + "(" + numeric4.modulo(max) + ")" + " output:" + output + " max:" + max);
-    }
-
     public static final Numeric ONE = new Numeric(1);
-
-    /**
-     *
-     * @param vector2 x
-     * @return bs
-     */
-    public static Vector clip(Vector vector2, Numeric input, Numeric max) {
-        Numeric[] numerics;
-
-        //c
-        numerics = new Numeric[vector2.state.length];
-        for (int len = 0; len < numerics.length; ++len) numerics[len] = input.modulo(vector2.state[len]);
-        Vector vector4 = new Vector(numerics);
-
-        //export
-        numerics = new Numeric[vector2.state.length];
-        Arrays.fill(numerics, new Numeric(0));
-        Vector export = new Vector(numerics);
-
-        //a
-        numerics = new Numeric[vector2.state.length];
-        Arrays.fill(numerics, new Numeric(1));
-        Vector vector7 = new Vector(numerics);
-        for (int __len = 0; __len < vector7.state.length; ++__len)
-            for (int len = 0; len < vector7.state.length; ++len)
-                vector7.state[__len] = vector7.state[__len].multiply(len == __len ? ONE : vector2.state[len]);
-
-        Vector[] vector6 = clipBLine(vector2.state, clipAtB(vector2.state, max), max);
-
-        for (int _len = 0; _len < vector6.length; ++_len) {
-
-            numerics = new Numeric[vector2.state.length];
-            Arrays.fill(numerics, new Numeric(0));
-
-            Numeric f = new Numeric(0);
-            for (int __len = 0; __len < vector2.state.length; ++__len) {
-                numerics[__len] = vector6[_len].state[__len].multiply(vector7.state[__len]).multiply(vector4.state[__len]).modulo(vector2.state[__len]);
-                f = f.add(vector6[_len].state[__len].multiply(vector7.state[__len]));
-            }
-            if (!f.modulo(max).equals(ONE)) continue;
-            export = vector6[_len];
-        }
-        System.out.println();
-        return export;
-    }
-
-    /**
-     *
-     * @param vector2 x
-     * @param vector9 c
-     * @param vector10 b
-     * @return input % max
-     */
-    public static Numeric clipOutput(Numeric[] vector2, Numeric[] vector9, Numeric[] vector10, Numeric max) {
-        Numeric numeric5 = new Numeric(0);
-        for (int len = 0; len < vector2.length; ++len)
-            numeric5 = numeric5.add(max.division(vector2[len]).multiply(vector9[len]).multiply(vector10[len]));
-        return numeric5.modulo(max);
-    }
-
-    /**
-     *
-     * @param vector2 x
-     * @param numeric4 input
-     * @return c
-     */
-    public static Numeric[] clipInput(Numeric[] vector2, Numeric numeric4, Numeric max) {
-        Numeric[] numerics2 = new Numeric[vector2.length];
-        for (int len = 0; len < numerics2.length; ++len) numerics2[len] = numeric4.modulo(vector2[len]);
-        return numerics2;
-    }
-
-    /**
-     *
-     * @param vector2 x
-     * @return
-     */
-    public static Numeric[][] clipAtB(Numeric[] vector2, Numeric max) {
-        Numeric[][] numerics = new Numeric[vector2.length][];
-        for (int _len = 0; _len < numerics.length; ++_len) {
-            Numeric numeric1 = vector2[_len];
-            for (Numeric numeric = ONE; numeric.compareTo(max.division(numeric1)) < 0; numeric = numeric.add(ONE)) {
-                if (max.division(numeric1).multiply(numeric).modulo(numeric1).equals(ONE)) {
-                    if (numerics[_len] == null) numerics[_len] = new Numeric[0];
-                    numerics[_len] = Arrays.copyOf(numerics[_len], numerics[_len].length + 1);
-                    numerics[_len][numerics[_len].length - 1] = numeric;
-                    continue;
-                }
-            }
-        }
-        for (Numeric[] numerics1 : numerics) log("output " + Arrays.toString(numerics1));
-        return numerics;
-    }
-
-    public static Vector[] clipBLine(Numeric[] vector2, Numeric[][] vector8, Numeric MAX) {
-        Vector[] vector6 = new Vector[0];
-        Numeric[] numerics;
-        int[] ints = new int[vector8.length];
-        long max = IntStream.range(0, vector8.length).mapToLong(len -> (ints[len] = vector8[len].length)).reduce(1, (a, b) -> a * b);
-
-        for (Numeric[] numeric : vector8) log("vec8 in " + Arrays.toString(numeric));
-
-        for (int len = 0; len < max; ++len) {
-            numerics = new Numeric[vector8.length];
-            vector6 = Arrays.copyOf(vector6, vector6.length + 1);
-            vector6[vector6.length - 1] = new Vector(numerics);
-            Numeric numeric = new Numeric(0);
-            for (int _len = 0; _len < vector8.length; ++_len) {
-                numerics[_len] = vector8[_len][len % ints[_len]];
-                numeric = numeric.add(numerics[_len].multiply(MAX.division(vector2[_len])));
-            }
-            numeric = numeric.modulo(MAX);
-            if (numeric.toValue().value != 1) vector6 = Arrays.copyOf(vector6, vector6.length - 1);
-        }
-        log("vector6 " + Arrays.toString(vector6));
-        return vector6;
-    }
 }
