@@ -78,6 +78,7 @@ public class CRT {
 
             Numeric f = new Numeric(0);
             for (int __len = 0; __len < min(vector2.state.length, vector6[_len].state.length) + not_min(vector2.state.length, vector6[_len].state.length); ++__len) {
+//                System.out.println(vector6[_len].state.length + " " + vector7.state.length + " " + vector4.state.length + " " + vector2.state.length + " " + __len);
                 numerics[__len] = vector6[_len].state[__len].multiply(vector7.state[__len]).multiply(vector4.state[__len]).modulo(vector2.state[__len]);
                 f = f.add(vector6[_len].state[__len].multiply(vector7.state[__len]));
             }
@@ -106,6 +107,7 @@ public class CRT {
             vector6[vector6.length - 1] = new Vector(numerics);
             Numeric numeric = new Numeric(0);
             for (int _len = 0; _len < vector8.length; ++_len) {
+//                if (vector8[_len].length != vector2.length) continue;
                 numerics[_len] = vector8[_len][len % ints[_len]];
                 numeric = numeric.add(numerics[_len].multiply(MAX.division(vector2[_len])));
             }
@@ -113,6 +115,9 @@ public class CRT {
             if (numeric.toValue().value != 1) vector6 = Arrays.copyOf(vector6, vector6.length - 1);
 //            Test.log("vec6 " + len + " " + numeric);
         }
+
+//        for (Vector vector : vector6) System.out.println("vehicle " + vector);
+//        for (Numeric[] numerics1 : vector8) System.out.println("behavior " + Arrays.toString(numerics1));
         return vector6;
     }
 
@@ -166,8 +171,10 @@ public class CRT {
     }
 
     public static long bit(long src0, long src1) {
-        long bit = Long.MAX_VALUE ^ (src0 + (Long.MAX_VALUE ^ src1));
+        long bit = Long.MAX_VALUE - src0 + src1;
+//        long bit = Long.MAX_VALUE ^ (src0 + (Long.MAX_VALUE ^ src1));
         return (long) (bit / Math.sqrt(bit * bit));
+//        return src0 < src1 ? 1 : -1;
     }
 
     public static int max(int src0, int src1) {
