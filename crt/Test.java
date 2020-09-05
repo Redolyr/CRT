@@ -25,7 +25,8 @@ public class Test {
             CRT crt = new CRT();
             final Object[][][] matches = {new Object[0][2]};
 
-            Numeric[] complete = new Numeric[]{new Numeric(4), new Numeric(5), new Numeric(6)};
+            int[] ints = new int[] {4, 5, 6};
+            Numeric[] complete = new Numeric[]{new Numeric(ints[0]), new Numeric(ints[1]), new Numeric(ints[2])};
 
             matches[0] = new Object[0][4];
 
@@ -72,11 +73,18 @@ public class Test {
 
             System.out.println("show match");
 
+            boolean match = false;
             for (Object[] m : matches[0]) {
-                log("match \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + (!m[2].equals(new Numeric(0)) && m[2].equals(m[3]) && !((Numeric) m[1]).isZero()));
-                if (!m[2].equals(new Numeric(0)) && m[2].equals(m[3]) && !((Numeric) m[1]).isZero()) {
+                match = !(m[2].equals(new Numeric(0))) && m[2].equals(m[3]) && !((Numeric) m[1]).isZero();
+                log("match \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + match);
+                int count = m[4] == null ? 0 : (int) Arrays.stream(((Vector) m[4]).state).filter(Numeric::isZero).count();
+                match = match && (m[4] == null ? true : count != ((Vector) m[4]).state.length);
+
+                if (match) {
                     objs = Arrays.copyOf(objs, objs.length + 1);
                     objs[objs.length - 1] = m;
+                    objs[objs.length - 1] = Arrays.copyOf(objs[objs.length - 1], objs[objs.length - 1].length + 1);
+                    objs[objs.length - 1][5] = match;
                 }
             }
 
@@ -85,7 +93,7 @@ public class Test {
             System.out.println("show match on");
 
             for (Object[] m : objs)
-                log("match on \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + (!m[2].equals(new Numeric(0)) && m[2].equals(m[3]) && !((Numeric) m[1]).isZero()));
+                log("match on \tbase:" + m[0] + " \tmax:" + m[1] + " \tmatch: " + m[2] + " \tlength:" + m[3] + " \tproduct:" + m[4] + " \tismatch:" + m[5]);
 
             Test.log("match on base count " + objs.length);
         } catch (OutOfMemoryError error) {
