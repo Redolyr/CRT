@@ -116,8 +116,9 @@ public class CRT {
 //            Test.log("vec6 " + len + " " + numeric);
         }
 
+        Test.log("observe " + Arrays.toString(vector6));
 //        for (Vector vector : vector6) System.out.println("vehicle " + vector);
-//        for (Numeric[] numerics1 : vector8) System.out.println("behavior " + Arrays.toString(numerics1));
+        for (Numeric[] numerics1 : vector8) Test.log("behavior " + Arrays.toString(numerics1));
         return vector6;
     }
 
@@ -172,9 +173,7 @@ public class CRT {
 
     public static long bit(long src0, long src1) {
         long bit = Long.MAX_VALUE - src0 + src1;
-//        long bit = Long.MAX_VALUE ^ (src0 + (Long.MAX_VALUE ^ src1));
         return (long) (bit / Math.sqrt(bit * bit));
-//        return src0 < src1 ? 1 : -1;
     }
 
     public static int max(int src0, int src1) {
