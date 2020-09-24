@@ -74,7 +74,7 @@ public class CRT {
 
         /*
             for (int _len = 0; _len < vec6.length; ++_len) {
-                numbers = new doub;e[numbers.length];
+                numbers = new double[numbers.length];
                 Arrays.fill(numbers, 0);
 
                 double f = 0;
