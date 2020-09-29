@@ -67,8 +67,9 @@ public class CRT {
         Arrays.fill(numerics, new Numeric(1));
         Vector vector7 = new Vector(numerics);
         for (int __len = 0; __len < vector7.state.length; ++__len)
-            for (int len = 0; len < vector7.state.length; ++len)
-                vector7.state[__len] = vector7.state[__len].multiply(len == __len ? ONE : vector2.state[len]);
+            for (int len = 0; len < vector2.state.length; ++len)
+                if (len != __len)
+                    vector7 = vector7.multiply(__len, vector2, len);
 
         Vector[] vector6 = clipBLine(vector2.state, sieving(clipAtB(vector2.state, max)), max);
 
@@ -86,18 +87,23 @@ public class CRT {
                 export = vec6[_len];
             }
          */
+        int count;
+        int length;
+        Vector vector;
         for (int _len = 0; _len < vector6.length; ++_len) {
-            numerics = new Numeric[vector2.state.length];
-            Arrays.fill(numerics, new Numeric(0));
-
-            Numeric f = new Numeric(0);
-            for (int __len = 0; __len < min(vector2.state.length, vector6[_len].state.length) + not_min(vector2.state.length, vector6[_len].state.length); ++__len) {
-//                System.out.println(vector6[_len].state.length + " " + vector7.state.length + " " + vector4.state.length + " " + vector2.state.length + " " + __len);
-                numerics[__len] = vector6[_len].state[__len].multiply(vector7.state[__len]).multiply(vector4.state[__len]).modulo(vector2.state[__len]);
-                f = f.add(vector6[_len].state[__len].multiply(vector7.state[__len]));
+            count = 0;
+            vector = new Vector(Arrays.copyOf(vector7.state, vector7.state.length));
+            length = min(vector2.state.length, vector6[_len].state.length) + not_min(vector2.state.length, vector6[_len].state.length);
+            for (int __len = 0; __len < length; ++__len) {
+                vector = vector.multiply(__len, vector6[_len], __len);
+                if (vector.modulo(__len, vector2, __len).compareTo(__len, ONE) == 0) ++count;
             }
-            if (!f.modulo(max).equals(ONE)) continue;
+            Test.log("expected " + count + " " + _len);
+            Test.log("implicit " + vector);
+            Test.log("implement max/a: " + vector7 + " a:" + vector2 + " b:" + vector6[_len] + " c:" + vector4);
+            if (!vector.sum().modulo(max).equals(ONE) && count != vector2.state.length) continue;
             export = vector6[_len];
+            Test.log("explicit " + vector);
         }
 //        for (Vector vector : vector6) Test.log("export vec6 " + vector);
 //        Test.log("export " + export);
