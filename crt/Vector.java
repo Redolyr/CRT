@@ -20,6 +20,98 @@ public class Vector {
         return innerProduct0(this, vectors);
     }
 
+    public Numeric add(int index, Numeric numeric) {
+        return this.state[index].add(numeric);
+    }
+
+    public Numeric sub(int index, Numeric numeric) {
+        return this.state[index].sub(numeric);
+    }
+
+    public Numeric multiply(int index, Numeric numeric) {
+        return this.state[index].multiply(numeric);
+    }
+
+    public Numeric division(int index, Numeric numeric) {
+        return this.state[index].division(numeric);
+    }
+
+    public Numeric modulo(int index, Numeric numeric) {
+        return this.state[index].modulo(numeric);
+    }
+
+    public Numeric takeModulo(int index, Numeric target) {
+        return this.state[index].takeModulo(target);
+    }
+
+    public Numeric negate(int index) {
+        return this.state[index].negate();
+    }
+
+    public Numeric abs(int index) {
+        return this.state[index].abs();
+    }
+
+    public boolean isNaN(int index) {
+        return this.state[index].isNaN();
+    }
+
+    public boolean isZero(int index) {
+        return this.state[index].isZero();
+    }
+
+    public boolean isInfinite(int index) {
+        return this.state[index].isInfinite();
+    }
+
+    public int compareTo(int index, Numeric o) {
+        return this.state[index].compareTo(o);
+    }
+
+    public Vector add(int index, Vector vector, int index0) {
+        Vector vector1 = new Vector(this.state);
+        vector1.state[index] = this.state[index].add(vector.state[index0]);
+        return vector1;
+    }
+
+    public Vector sub(int index, Vector vector, int index0) {
+        Vector vector1 = new Vector(this.state);
+        vector1.state[index] = this.state[index].sub(vector.state[index0]);
+        return vector1;
+    }
+
+    public Vector multiply(int index, Vector vector, int index0) {
+        Vector vector1 = new Vector(this.state);
+        vector1.state[index] = this.state[index].multiply(vector.state[index0]);
+        return vector1;
+    }
+
+    public Vector division(int index, Vector vector, int index0) {
+        Vector vector1 = new Vector(this.state);
+        vector1.state[index] = this.state[index].division(vector.state[index0]);
+        return vector1;
+    }
+
+    public Vector modulo(int index, Vector vector, int index0) {
+        Vector vector1 = new Vector(this.state);
+        vector1.state[index] = this.state[index].modulo(vector.state[index0]);
+        return vector1;
+    }
+
+    public Vector takeModulo(int index, Vector vector, int index0) {
+        Vector vector1 = new Vector(this.state);
+        vector1.state[index] = this.state[index].takeModulo(vector.state[index0]);
+        return vector1;
+    }
+
+    public int compareTo(int index, Vector vector, int index0) {
+        return this.state[index].compareTo(vector.state[index0]);
+    }
+
+    public Numeric sum() {
+        return sum(this);
+    }
+
     public String toString() {
         String string = "";
         for (Numeric numeric : this.state) string += numeric.toString() + ", ";
