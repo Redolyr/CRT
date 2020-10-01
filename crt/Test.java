@@ -25,7 +25,7 @@ public class Test {
             CRT crt = new CRT();
             final Object[][][] matches = {new Object[0][2]};
 
-            int[] ints = new int[] {4, 5, 6};
+            int[] ints = new int[] {5, 7, 9};
             Numeric[] complete = new Numeric[]{new Numeric(ints[0]), new Numeric(ints[1]), new Numeric(ints[2])};
 
             matches[0] = new Object[0][4];
