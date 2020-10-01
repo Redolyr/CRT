@@ -1,7 +1,6 @@
 package crt;
 
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 public class CRT {
 
@@ -71,25 +70,12 @@ public class CRT {
                 if (len != __len)
                     vector7 = vector7.multiply(__len, vector2, len);
 
-        Vector[] vector6 = clipBLine(vector2.state, sieving(clipAtB(vector2.state, max)), max);
+        Vector[] vector6 = clipBLine(vector2.state, clipAtB(vector2.state, max), max);
 
-        /*
-            for (int _len = 0; _len < vec6.length; ++_len) {
-                numbers = new double[numbers.length];
-                Arrays.fill(numbers, 0);
-
-                double f = 0;
-                for (int __len = 0; __len < Math.min(vec2.length, vec6[_len].length); ++__len) {
-                    numbers[__len] = (vec6[_len][__len] * vec7[__len] * vec4[__len]) % vec2[__len];
-                    f += vec6[_len][__len] * vec7[__len];
-                }
-                if (f != 1) continue;
-                export = vec6[_len];
-            }
-         */
         int count;
         int length;
         Vector vector;
+        boolean is = false;
         for (int _len = 0; _len < vector6.length; ++_len) {
             count = 0;
             vector = new Vector(Arrays.copyOf(vector7.state, vector7.state.length));
@@ -101,44 +87,21 @@ public class CRT {
             Test.log("expected " + count + " " + _len);
             Test.log("implicit " + vector);
             Test.log("implement max/a: " + vector7 + " a:" + vector2 + " b:" + vector6[_len] + " c:" + vector4);
-            if (!vector.sum().modulo(max).equals(ONE) && count != vector2.state.length) continue;
+            is = vector.sum().modulo(max).equals(ONE);
+            for (int __len = 0; __len < length; ++__len) vector = vector.multiply(__len, vector7, __len);
+            if (!is && count != vector2.state.length && vector.sum().modulo(max).toValue().compareTo(input) != 0) continue;
             export = vector6[_len];
             Test.log("explicit " + vector);
         }
-//        for (Vector vector : vector6) Test.log("export vec6 " + vector);
-//        Test.log("export " + export);
         return export;
     }
 
-    /*
-    double[][] vec6 clipBLine(double[] vec2, double[][] vec6, double max)
-       double[][] vec6 = new double[0][];
-       int[] ints = new int[vec8.length];
-       long max = 1;
-
-       for (int i = 0; i < vec8.length; ++i) max *= (ints[i] = (vec8[i] == null ? 0 : vec8[i].length);
-
-       for (int len = 0; len < max; ++len) {
-           vec6 = Arrays.copyOf(vec6, vec6.length + 1);
-           vec6[vec6.length - 1] = new double[vec8.length];
-
-           for (int _len = ; _len < vec8.length; ++_len) {
-               numbers[_len] = vec8[_len][len % ints[_len]];
-               number += numbers[_len] * MAX/  vec2[_len];
-               number = number % MAX;
-               if (number != 1) vec6 = Arrays.copyOf(vec6, vec6.length - 1);
-           }
-       }
-       return vec6;
-     */
     private static Vector[] clipBLine(Numeric[] vector2, Numeric[][] vector8, Numeric MAX) {
         Vector[] vector6 = new Vector[0];
         Numeric[] numerics;
         int[] ints = new int[vector8.length];
         long max = 1;
         for (int i = 0; i < vector8.length; i++) {
-//            System.out.println("let " + vector8.length + ": " + Arrays.toString(vector8));
-//            System.out.println(ints.length);
             max = max * (ints[i] = (vector8[i] == null ? 0 : vector8[i].length));
         }
 
@@ -158,22 +121,10 @@ public class CRT {
         }
 
         Test.log("observe " + Arrays.toString(vector6));
-//        for (Vector vector : vector6) System.out.println("vehicle " + vector);
         for (Numeric[] numerics1 : vector8) Test.log("behavior " + Arrays.toString(numerics1));
         return vector6;
     }
 
-    /*
-    double[][] clipAtB(double[] vec2, double max)
-        double[][] numbers = new double[vec2.length][];
-        for (int _len = 0; _len < numbers.length; ++_len) {
-            double number1  = vec2[_len];
-            for (int number = 1; number < max / number1; ++number) {
-                numbers[_len] = Arrays.copyOf(numbers[_len], numbers[_len].length + 1);
-                numbers[_len][numbers[_len].length - 1] = ((max / number1 * number) % number1) == 1 ? number : 0;
-            }
-        }
-     */
     private static Numeric[][] clipAtB(Numeric[] vector2, Numeric max) {
         Numeric[][] numerics = new Numeric[vector2.length][];
         Test.log("clip vector2:" + Arrays.toString(vector2) + " vector2-length:" + vector2.length + " max:" + max);
@@ -190,12 +141,6 @@ public class CRT {
         return numerics;
     }
 
-    /*
-    double clipOutput(double[] vec2, double[] vec9, double[] vec10, double max)
-        double number5 = 0;
-        for (int len = 0; len < Math.min(vec2.length, vec10.length); ++len) number5 += max / vec2[len] * vec9[len] * vec10[len];
-        return number5 % max;
-     */
     private static Numeric clipOutput(Numeric[] vector2, Numeric[] vector9, Numeric[] vector10, Numeric max) {
         Numeric numeric5 = new Numeric(0);
         for (int len = 0; len < min(vector2.length, vector10.length) + not_min(vector2.length, vector10.length); ++len)
@@ -203,36 +148,10 @@ public class CRT {
         return numeric5.modulo(max);
     }
 
-    /*
-    double[] clipC(double[] vec2, double number4, double max)
-        double[] number2 = new double[vec2.length];
-        for (int len = 0; len < number2.length; ++len) number2[len] = number4 % vec2[len];
-        return number2;
-     */
     private static Vector clipC(Vector vector2, Numeric numeric4, Numeric max) {
         Numeric[] numerics2 = new Numeric[vector2.state.length];
         for (int len = 0; len < numerics2.length; ++len) numerics2[len] = numeric4.modulo(vector2.state[len]);
         return new Vector(numerics2);
-    }
-
-    public static Numeric[][] sieving(Numeric[][] numerics) {
-        if (numerics.length == 0) return new Numeric[0][0];
-        int[] indices = new int[0];
-        for (int len = 0; len < numerics.length; ++len) {
-            if (numerics[len] == null) continue;
-            for (Numeric numeric : numerics[len]) {
-                if (numeric == null) continue;
-                if (!numeric.isZero()) {
-                    indices = Arrays.copyOf(indices, indices.length + 1);
-                    indices[indices.length - 1] = len;
-                    break;
-                }
-            }
-        }
-        if (indices.length == 0) return new Numeric[][] {numerics[0]};
-        Numeric[][] numerics1 = new Numeric[indices.length][];
-        for (int len = 0; len < indices.length; ++len) numerics1[len] = numerics[indices[len]];
-        return numerics1;
     }
 
     public static long bit(long src0, long src1) {
