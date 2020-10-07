@@ -75,7 +75,7 @@ public class CRT {
         int count;
         int length;
         Vector vector;
-        boolean is = false;
+        boolean is;
         for (int _len = 0; _len < vector6.length; ++_len) {
             count = 0;
             vector = new Vector(Arrays.copyOf(vector7.state, vector7.state.length));
@@ -84,14 +84,10 @@ public class CRT {
                 vector = vector.multiply(__len, vector6[_len], __len);
                 if (vector.modulo(__len, vector2, __len).compareTo(__len, ONE) == 0) ++count;
             }
-            Test.log("expected " + count + " " + _len);
-            Test.log("implicit " + vector);
-            Test.log("implement max/a: " + vector7 + " a:" + vector2 + " b:" + vector6[_len] + " c:" + vector4);
             is = vector.sum().modulo(max).equals(ONE);
             for (int __len = 0; __len < length; ++__len) vector = vector.multiply(__len, vector7, __len);
             if (!is && count != vector2.state.length && vector.sum().modulo(max).toValue().compareTo(input) != 0) continue;
             export = vector6[_len];
-            Test.log("explicit " + vector);
         }
         return export;
     }
@@ -111,17 +107,14 @@ public class CRT {
             vector6[vector6.length - 1] = new Vector(numerics);
             Numeric numeric = new Numeric(0);
             for (int _len = 0; _len < vector8.length; ++_len) {
-//                if (vector8[_len].length != vector2.length) continue;
                 numerics[_len] = vector8[_len][len % ints[_len]];
                 numeric = numeric.add(numerics[_len].multiply(MAX.division(vector2[_len])));
             }
             numeric = numeric.modulo(MAX);
             if (numeric.toValue().value != 1) vector6 = Arrays.copyOf(vector6, vector6.length - 1);
-//            Test.log("vec6 " + len + " " + numeric);
         }
 
         Test.log("observe " + Arrays.toString(vector6));
-        for (Numeric[] numerics1 : vector8) Test.log("behavior " + Arrays.toString(numerics1));
         return vector6;
     }
 
@@ -135,8 +128,6 @@ public class CRT {
                 numerics[_len] = Arrays.copyOf(numerics[_len], numerics[_len].length + 1);
                 numerics[_len][numerics[_len].length - 1] = max.division(numeric1).multiply(numeric).modulo(numeric1).equals(ONE) ? numeric : new Numeric(0);
             }
-//            Test.log("most index:" + _len + " max:" + max + " div:" + numeric1 + " mod:" + numeric1);
-            Test.log("post " + _len + " " + Arrays.toString(numerics[_len]));
         }
         return numerics;
     }
